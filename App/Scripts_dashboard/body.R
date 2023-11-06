@@ -176,9 +176,15 @@ body <- dashboardBody(
             h3("Cargar datos", align = "left"),
                        br(),
                        fileInput("file2", "Importar datos del muestreo",
-                                 accept = c("text/csv",
-                                            "text/comma-separated-values,text/plain",
-                                            ".csv")),
+                                 accept =  c(
+                                   ".csv",
+                                   ".txt",
+                                   ".xlsx",
+                                   "text/csv",
+                                   "text/plain",
+                                   "text/tab-separated-values",
+                                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                 )),
                        br(),
                        br(),
                        uiOutput("variable_select"),
@@ -255,9 +261,15 @@ body <- dashboardBody(
           br(),
           h3("Seleccionar el archivo a evaluar."),
           fileInput("file3", "Importar datos para la evaluación del muestreo.",
-                    accept = c("text/csv",
-                               "text/comma-separated-values,text/plain",
-                               ".csv")),
+                    accept =  c(
+                      ".csv",
+                      ".txt",
+                      ".xlsx",
+                      "text/csv",
+                      "text/plain",
+                      "text/tab-separated-values",
+                      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )),
           h3("Seleccionar los parametros para la evaluación de los valores observados y auditados."),
           br(),
           sliderInput("freq20",
@@ -294,11 +306,26 @@ body <- dashboardBody(
           actionButton("analizar", "Analizar Correlación"),
           br(),
           br(),
-          h3("Gráfica bivariada entre valor observador vs valor auditado"),
-          plotOutput("plotCorrelation"),
-          br(),
-          
-          br(),
+
+          fluidRow(
+            box(
+              title = "Tabla de Datos",
+              status = "primary",
+              solidHeader = TRUE,
+              collapsible = TRUE,
+              width = 12,  # Ocupará todo el ancho disponible
+              div(style = "height: 400px;",  # Establece el alto de la tabla
+                  reactableOutput("Tabla2"))
+            ),
+            box(
+              title = "Gráfico de Dispersión",
+              status = "primary",
+              solidHeader = TRUE,
+              collapsible = TRUE,
+              width = 12,  # Ocupará todo el ancho disponible
+              highchartOutput("ScatterPlot", height = "400px")  # Establece el alto del gráfico Highcharter
+            )
+          ),
           br(),
           h3("Evaluación en la comparación del valor observador vs valor auditado"),
           br(),

@@ -334,6 +334,8 @@ server <- function(input, output, session) {
   #################################################################################
   #################################################################################
   
+  ###### Datos a reactive 
+  
   data2 <- reactive({
     inFile <- input$file3
     if (is.null(inFile)) {
@@ -341,6 +343,9 @@ server <- function(input, output, session) {
     }
     read.csv(inFile$datapath)
   })
+  
+  
+  ###### Variables
   
   output$var1 <- renderUI({
     selectInput("select_var1", "Seleccione Variable 1:", names(data2()))
@@ -350,37 +355,55 @@ server <- function(input, output, session) {
     selectInput("select_var2", "Seleccione Variable 2:", names(data2()))
   })
   
+  
+  
+  ###### Aplicar el boton activar 
+  
+  
+
   observeEvent(input$analizar, {
-    output$plotCorrelation <- renderPlot({
-      plot(data2()[,input$select_var1], data2()[,input$select_var2], 
-           main=paste("Correlación entre", input$select_var1, "y", input$select_var2), 
-           xlab=input$select_var1, ylab=input$select_var2)
+  
+    
+    
+    # Para la tabla reactable
+    output$Tabla2 <- renderReactable({
+      req(input$select_var1, input$select_var2)  # Asegurarse de que las entradas estén disponibles
+      # Asegúrate de que los nombres de las columnas existan en data2()
+      Datos <- data2() %>%
+        dplyr::rename(
+          Observado = input$select_var1,
+          Auditado = input$select_var2
+        )
+      reactable(Datos)
     })
+    
+    
+    output$ScatterPlot <- renderHighchart({
+      # Asegúrate de que las entradas estén disponibles
+      req(input$select_var1, input$select_var2)
+      
+      # Asegúrate de que los nombres de las columnas existan en data2()
+      Datos <- data2() %>%
+        dplyr::rename(
+          Observado = input$select_var1,
+          Auditado = input$select_var2
+        )
+      
+      # Crear el gráfico de dispersión con Highcharter
+      
+      hc <- Datos %>% 
+                hchart('scatter', hcaes(x = Observado, y = Auditado))
+      
+      
+      hc
+      
+      
+    })
+    
+    
+    
   })
   
-  
-  # Bivariado con HighCharter #
-  
-  output$scatter <- renderHighchart({
-    
-    
-    req(input$select_var1)
-    req(input$select_var2)
-    
-    Datos2 <- as.data.frame(c(data2()[[input$select_var1]],data2()[[input$select_var2]]))  %>% 
-      dplyr::rename(
-        Observado = `data2()[[input$select_var1]]`,
-        Auditado = `data2()[[input$select_var2]]`
-        
-      )
-    
-    scatter <-  hchart(Datos2, "scatter", hcaes(x = Observado, y = Auditado ))
-    
-             
-    
-    scatter
-    
-  })
   
   # Structura #
   
