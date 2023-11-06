@@ -102,7 +102,8 @@ server <- function(input, output, session) {
     
     Stats <- Datos %>%
       
-                             summarise(
+                             summarise(  ValoresNegativos = sum(Monto < 0, na.rm = TRUE),
+                                         ValoresFaltantes = sum(is.na(Monto)),
                                          Minimo = min(Monto, na.rm = TRUE),
                                          Maximo = max(Monto, na.rm = TRUE),
                                          Promedio = mean(Monto, na.rm = TRUE),
@@ -111,10 +112,12 @@ server <- function(input, output, session) {
                                           DesviacionEstandar = sd(Monto, na.rm = TRUE),
                                           Percentil10 = quantile(Monto, 0.1, na.rm = TRUE),
                                           Percentil25 = quantile(Monto, 0.25, na.rm = TRUE),
-                                           Percentil75 = quantile(Monto, 0.75, na.rm = TRUE),
-                                           Percentil90 = quantile(Monto, 0.9, na.rm = TRUE),
-                                          ValoresNegativos = sum(Monto < 0, na.rm = TRUE),
-                                             ValoresFaltantes = sum(is.na(Monto)) 
+                                         Percentil50 = quantile(Monto, 0.50, na.rm = TRUE),
+                                         Percentil75 = quantile(Monto, 0.75, na.rm = TRUE),
+                                         Percentil90 = quantile(Monto, 0.90, na.rm = TRUE)
+
+                                         
+                                          
       ) %>% pivot_longer(
         cols = everything(),
         names_to = "Medida",
@@ -124,12 +127,39 @@ server <- function(input, output, session) {
       
     
         
-        reactable(Stats)
+        reactable(Stats, defaultPageSize = 15)
 
   })
   
+  # Genera datos binomiales
+  n_binom <- 10000  # Número de observaciones
+  size <- 100       # Número de ensayos
+  prob <- 0.5       # Probabilidad de éxito
+  datos_binom <- rbinom(n_binom, size, prob)
   
-  # Función ajustar distribuciones y calcular AIC #
+  # Genera datos de Poisson
+  n_pois <- 10000  # Número de observaciones
+  lambda <- 40     # Tasa promedio de éxito
+  set.seed(123)    # Para reproducibilidad
+  outliers <- c(sample(80:100, size = 10, replace = TRUE)) # Genera algunos valores extremos
+  datos_pois_extremos <- c(rpois(n_pois, lambda), outliers)
+  
+  # Output del gráfico binomial
+  output$binomialPlot <- renderPlot({
+    ggplot(data.frame(Valor = datos_binom), aes(x = Valor)) +
+      geom_histogram(binwidth = 1, fill = 'skyblue', color = 'black') +
+      labs(title = "Distribución Binomial", x = "", y = "Frecuencia")
+  })
+  
+  # Output del gráfico de Poisson
+  output$poissonPlot <- renderPlot({
+    ggplot(data.frame(Valor = datos_pois_extremos), aes(x = Valor)) +
+      geom_histogram(bins = 120, fill = 'skyblue', color = 'black') +
+      labs(title = "Distribución de Poisson con valores extremos",
+           x = "", y = "Frecuencia")
+  })
+
+  
   
 
   

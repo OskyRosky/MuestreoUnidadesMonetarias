@@ -18,8 +18,7 @@ options(scipen=999)
 #  Directorio  #
 ################
 
-
-setwd("C:/Users/Oscar Centeno/Desktop/Oscar/CGR/2023/Muestreo Auditoría/App/Scripts_dashboard")
+setwd("C:/Users/Oscar Centeno/Desktop/Oscar/Github/MuestreoUnidadesMonetarias/App/Scripts_dashboard")
 
 #################
 #   Librerias   # 

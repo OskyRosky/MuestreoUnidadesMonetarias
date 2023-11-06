@@ -113,10 +113,11 @@ body <- dashboardBody(
                         "text/tab-separated-values",
                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                       )),
-            br(),
-            br(),
             uiOutput("variable_select_1"),
-            
+            br(),
+            h3("Estadíticas descriptivas", align = "left"),
+            reactableOutput("stats"), # Salida para la tabla de estadísticas   ---->  reactableOutput()
+            br(),
             h3("Análisis de distribuciones", align = "left"),
             br(),                                                  # histogram1
             
@@ -124,13 +125,32 @@ body <- dashboardBody(
             # highchartOutput("histogramX"),
             
             # highchartOutput("histogram1"),
-            br(),
-            h3("Estadíticas descriptivas", align = "left"),
-            br(),
-            reactableOutput("stats"), # Salida para la tabla de estadísticas   ---->  reactableOutput()
-            br(),
+
             h3("Comparación de Ajuste de Distribuciones", align = "left"),
-            br()
+            h4("Si posee datos aglomerados o consistentes en todo el rango de posibles valores, es mejor que opte por un ajuste Binomial. Caso contrario,
+               datos que están muy alejados de la aglomeración y presentan uno o varios valores extremos, es mejor que opte por un ajuste dedistrubición
+               de poisson. Por favor, guiarse según las siguientes gráficas de distrubución.", align = "left"),
+            br(),
+            fluidRow(
+              box(
+                title = "Comparación de distribuciones",
+                status = "primary",
+                solidHeader = TRUE,
+                collapsible = TRUE,
+                width = 12,
+                fluidRow(
+                  column(
+                    width = 6,
+                    plotOutput("binomialPlot")
+                  ),
+                  column(
+                    width = 6,
+                    plotOutput("poissonPlot")
+                  )
+                )
+              )
+            )
+            
 
     ),
     
@@ -277,13 +297,7 @@ body <- dashboardBody(
           h3("Gráfica bivariada entre valor observador vs valor auditado"),
           plotOutput("plotCorrelation"),
           br(),
-          fluidRow(
-            box(
-              solidHeader = TRUE, 
-              width = 12,
-              highchartOutput("scatter")
-            )
-          ),
+          
           br(),
           br(),
           h3("Evaluación en la comparación del valor observador vs valor auditado"),
