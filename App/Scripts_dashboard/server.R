@@ -234,24 +234,22 @@ server <- function(input, output, session) {
   #    Visualización de la tabla  #
   #################################
   
-  
-  output$sample  <- renderReactable({
-    
+  # Objeto reactivo para la selección de las unidades
+  Muestra <- reactive({
     req(input$update)  # Asegúrate de que el botón de actualizar se ha pulsado
-    req(input$variable2)  # Asegúrate de que se ha seleccionado una variable
+    req(sample_size())  # Asegúrate de que el valor reactivo no sea NULL
     
-    # Obtén el tamaño de muestra y los datos
     n_muestra <- sample_size()$Muestra
     datos <- data2()
     
-    # Asegúrate de que los datos y el tamaño de la muestra no son NULL
-    if (is.null(n_muestra) || is.null(datos)) {
+    # Asegúrate de que hay datos para procesar
+    if (is.null(datos) || is.null(n_muestra)) {
       return(NULL)
     }
     
     # Calcula las probabilidades de selección
     total_valor <- sum(datos[[input$variable2]], na.rm = TRUE)
-    if(total_valor == 0) return(NULL)  # Evitar división por cero
+    if (total_valor == 0) return(NULL)  # Evita división por cero
     
     prob_seleccion <- datos[[input$variable2]] / total_valor
     
@@ -264,45 +262,26 @@ server <- function(input, output, session) {
       prob = prob_seleccion
     )
     
-    # Obtén las filas de la muestra basándote en los IDs seleccionados
-    muestra <- datos[muestra_ids, c('ID','bookValue')]
-    
-    # Renderiza la tabla con la muestra seleccionada
-    reactable(muestra)
-    
+    # Devuelve las filas seleccionadas para la muestra
+    datos[muestra_ids, ]
   })
   
   
-  ########################
-  #  Datos Reactive      #
-  ########################
-  
-  Muestra <- reactive({
+  output$sample  <- renderReactable({
     
-    stage1 <- planning(materiality = input$freq1, 
-                       expected = input$freq2,
-                       likelihood = input$distri, 
-                       conf.level = input$freq3
-    )
-    
-    stage2 <- selection(
-      data = data2(), 
-      size = stage1,      #### Stage1 previous defined 
-      units = "values", 
-      values = input$variable,   #### Column from  data
-      method = "random", start = 2
-    )
-    
-    sample <- stage2[["sample"]]
-    sample
+    req(Muestra())  # Asegúrate de que el objeto reactivo no sea NULL
+    reactable(Muestra())  # Renderiza el objeto reactivo en una tabla
   })
+
+  
+  #################################################
+  #    Comparación de datos originales y muestra  #
+  #################################################
+  
+
   
   
-  
-  
-  
-  
-  
+
   #################################
   #         Descargar muestra     #
   #################################
@@ -316,6 +295,10 @@ server <- function(input, output, session) {
       br(),
       br(),
       downloadButton("download2.2",".txt file"),
+      br(),
+      br(),
+      downloadButton("download2.3",".xlsx file"),
+      
       footer = modalButton("Close"),
       easyClose = TRUE)
     )
@@ -341,6 +324,16 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       write.table(Muestra(), file)
+    }
+  )
+  
+  output$download2.3 <- downloadHandler(
+    filename = function() {
+      paste("Muestra-", Sys.Date(), ".xlsx", sep="")
+    },
+    content = function(file) {
+      # Suponiendo que Muestra() es una función que retorna el dataframe que quieres descargar
+      write.xlsx(Muestra(), file)
     }
   )
   

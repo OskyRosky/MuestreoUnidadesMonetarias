@@ -6,6 +6,7 @@
 #  Librerías  # 
 ###############
 
+suppressMessages(library(openxlsx))
 suppressMessages(library(shiny))
 suppressMessages(library(shinydashboard))
 suppressMessages(library(readxl))

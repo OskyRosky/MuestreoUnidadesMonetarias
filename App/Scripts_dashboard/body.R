@@ -186,15 +186,15 @@ body <- dashboardBody(
                                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                  )),
                        br(),
-                       br(),
                        uiOutput("variable_select"),
             #           plotOutput("histogram2"),
+                       h2("Muestreo: tamaño y selección", align = "left"),
                        br(),
-                       br(),
-                       h1("Muestreo: tamaño y selección", align = "center"),
-                       br(),
+                       h4("Poner acá texto",align = "left"),
                        br(),
                        h3("Cálculo de tamaño de muestra"),
+                       br(),
+                       h4("Poner acá texto sobre guías para determinar el tamaño de muestra",align = "left"),
                        br(),
                        sliderInput("freq1",
                                    "Tolerable:",
@@ -204,8 +204,8 @@ body <- dashboardBody(
                                    min = 0.01,  max = 0.99, value = 0.01), 
                        selectInput("distri", "Seleccione el nivel:",  
                                    list(`Tipo` = list("poisson",
-                                                      "binomial", 
-                                                      "hypergeometric"
+                                                      "binomial"
+                                                      
                                    )
                                    )
                        ),
@@ -230,7 +230,14 @@ body <- dashboardBody(
                            reactableOutput("sample")  
                          )
                        ),
+            
+            #################################################
+            #    Comparación de datos originales y muestra  #
+            #################################################
                        
+                  h3("Comprarción de datos vs muestra seleccionada"),
+            
+            
                        #################################
                        #         Descargar muestra     #
                        #################################
