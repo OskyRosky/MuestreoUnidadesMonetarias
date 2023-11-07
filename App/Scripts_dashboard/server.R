@@ -91,7 +91,8 @@ server <- function(input, output, session) {
   
   output$stats <- renderReactable({
     
-    req(input$variable1)
+  
+    
     
     Datos <- as.data.frame(data1()[[input$variable1]])  %>% 
                                               dplyr::rename(
@@ -177,7 +178,7 @@ server <- function(input, output, session) {
   # Data la volvemos un objeto reactivo 
   #  data ---> data()
   
-  data <- reactive({
+  data2 <- reactive({
     inFile <- input$file2
     if (is.null(inFile)) {
       return(NULL)
@@ -189,10 +190,10 @@ server <- function(input, output, session) {
   # Histograma de una variable #
   
   output$variable_select <- renderUI({
-    if (is.null(data())) {
+    if (is.null(data2())) {
       return(NULL)
     } else {
-      selectInput("variable", "Elija una variable:", names(data()))
+      selectInput("variable2", "Elija una variable:", names(data2()))
     }
   })
   
@@ -208,24 +209,26 @@ server <- function(input, output, session) {
   #    Cálculo tamaño muestra     #
   #################################
   
-  output$SampleSize <- renderReactable({
+  # Objeto reactivo para el tamaño de muestra
+  sample_size <- reactiveVal()  # Inicializa como un valor reactivo
+  
+  observeEvent(input$update, {  # Cuando 'update' se presiona, se ejecuta el código dentro de observeEvent
+    stage1 <- planning(materiality = input$freq1, 
+                       expected = input$freq2,
+                       likelihood = input$distri, 
+                       conf.level = input$freq3
+    )
     
-    if (input$update) {
-      
-      stage1 <- planning(materiality = input$freq1, 
-                         expected = input$freq2,
-                         likelihood = input$distri, 
-                         conf.level = input$freq3
-      )
-      
-      sample_size <- data.frame(`Muestra` = stage1$n)
-      reactable(sample_size)
-      
-    } else {
-      NULL
-    }
-    
+    sample_size(data.frame(`Muestra` = stage1$n))  # Asigna el valor al reactivo
   })
+  
+  # Renderizar la tabla de tamaño de muestra
+  output$SampleSize <- renderReactable({
+    req(sample_size())  # Asegúrate de que el valor reactivo no sea NULL
+    reactable(sample_size())  # Renderiza el valor reactivo en una tabla
+  })
+  
+  
   
   #################################
   #    Visualización de la tabla  #
@@ -234,29 +237,38 @@ server <- function(input, output, session) {
   
   output$sample  <- renderReactable({
     
-    if (input$update) {
-      
-      stage1 <- planning(materiality = input$freq1, 
-                         expected = input$freq2,
-                         likelihood = input$distri, 
-                         conf.level = input$freq3
-      )
-      
-      stage2 <- selection(
-        data = data(), 
-        size = stage1,      #### Stage1 previous defined 
-        units = "values", 
-        values = input$variable,   #### Column from  data
-        method = "random", start = 2
-      )
-      
-      sample <- stage2[["sample"]]
-      
-      reactable(sample)
-      
-    } else {
-      NULL
+    req(input$update)  # Asegúrate de que el botón de actualizar se ha pulsado
+    req(input$variable2)  # Asegúrate de que se ha seleccionado una variable
+    
+    # Obtén el tamaño de muestra y los datos
+    n_muestra <- sample_size()$Muestra
+    datos <- data2()
+    
+    # Asegúrate de que los datos y el tamaño de la muestra no son NULL
+    if (is.null(n_muestra) || is.null(datos)) {
+      return(NULL)
     }
+    
+    # Calcula las probabilidades de selección
+    total_valor <- sum(datos[[input$variable2]], na.rm = TRUE)
+    if(total_valor == 0) return(NULL)  # Evitar división por cero
+    
+    prob_seleccion <- datos[[input$variable2]] / total_valor
+    
+    # Selecciona las unidades de la muestra según sus probabilidades
+    set.seed(123)  # Establece una semilla para reproducibilidad
+    muestra_ids <- sample(
+      x = seq_len(nrow(datos)), 
+      size = n_muestra, 
+      replace = FALSE, 
+      prob = prob_seleccion
+    )
+    
+    # Obtén las filas de la muestra basándote en los IDs seleccionados
+    muestra <- datos[muestra_ids, c('ID','bookValue')]
+    
+    # Renderiza la tabla con la muestra seleccionada
+    reactable(muestra)
     
   })
   
@@ -274,7 +286,7 @@ server <- function(input, output, session) {
     )
     
     stage2 <- selection(
-      data = data(), 
+      data = data2(), 
       size = stage1,      #### Stage1 previous defined 
       units = "values", 
       values = input$variable,   #### Column from  data
@@ -284,6 +296,11 @@ server <- function(input, output, session) {
     sample <- stage2[["sample"]]
     sample
   })
+  
+  
+  
+  
+  
   
   
   #################################
@@ -336,7 +353,7 @@ server <- function(input, output, session) {
   
   ###### Datos a reactive 
   
-  data2 <- reactive({
+  data3 <- reactive({
     inFile <- input$file3
     if (is.null(inFile)) {
       return(NULL)
@@ -348,11 +365,11 @@ server <- function(input, output, session) {
   ###### Variables
   
   output$var1 <- renderUI({
-    selectInput("select_var1", "Seleccione Variable 1:", names(data2()))
+    selectInput("select_var1", "Seleccione Variable 1:", names(data3()))
   })
   
   output$var2 <- renderUI({
-    selectInput("select_var2", "Seleccione Variable 2:", names(data2()))
+    selectInput("select_var2", "Seleccione Variable 2:", names(data3()))
   })
   
   
@@ -369,7 +386,7 @@ server <- function(input, output, session) {
     output$Tabla2 <- renderReactable({
       req(input$select_var1, input$select_var2)  # Asegurarse de que las entradas estén disponibles
       # Asegúrate de que los nombres de las columnas existan en data2()
-      Datos <- data2() %>%
+      Datos <- data3() %>%
         dplyr::rename(
           Observado = input$select_var1,
           Auditado = input$select_var2
@@ -383,7 +400,7 @@ server <- function(input, output, session) {
       req(input$select_var1, input$select_var2)
       
       # Asegúrate de que los nombres de las columnas existan en data2()
-      Datos <- data2() %>%
+      Datos <- data3() %>%
         dplyr::rename(
           Observado = input$select_var1,
           Auditado = input$select_var2
