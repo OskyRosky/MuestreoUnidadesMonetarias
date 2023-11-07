@@ -197,6 +197,22 @@ server <- function(input, output, session) {
     }
   })
   
+  # Datos para la tabla de sugerencias de tamaño de muestra
+  sugerencias_tamaño <- data.frame(
+    `Tamaño de Muestra` = c("Pequeño (<=40)", "Mediano (50-100)", "Grande (100-400)"),
+    `Margen de Tolerancia (Tolerable)` = c("0.2 - 0.3", "0.03 - 0.05", "0.01 - 0.03"),
+    `Error Esperado` = c("0.05 - 0.10", "0.02 - 0.05", "0.01 - 0.02"),
+    `Nivel de Confianza` = c("0.90 - 0.95", "0.95 - 0.99", "> 0.99")
+  )
+  
+  # Genera la tabla reactiva
+  output$SugerenciasTamaño <- renderReactable({
+    reactable(sugerencias_tamaño, bordered = TRUE, highlight = TRUE)
+    
+    
+  })
+  
+  
   # output$histogram2 <- renderPlot({
   #  if (is.null(input$variable)) {
   #    return(NULL)

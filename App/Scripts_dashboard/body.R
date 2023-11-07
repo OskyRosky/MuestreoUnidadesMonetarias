@@ -194,8 +194,43 @@ body <- dashboardBody(
                        br(),
                        h3("Cálculo de tamaño de muestra"),
                        br(),
-                       h4("Poner acá texto sobre guías para determinar el tamaño de muestra",align = "left"),
+                       h4("Cuando estás determinando el tamaño de una muestra para tu estudio, hay varios factores clave a considerar
+                          que influyen directamente en la cantidad de datos que necesitas recolectar:",align = "left"),
                        br(),
+                       h4("Margen de Tolerancia (Tolerable): Este valor representa el máximo error de estimación que estás dispuesto a aceptar
+                          en tus resultados. Un margen mayor sugiere que estás tolerando una mayor incertidumbre, lo que puede resultar en una
+                          muestra más pequeña. En contraste, un margen más ajustado requiere una muestra más grande para garantizar que tus estimaciones
+                          estén dentro de ese rango estrecho.",align = "left"),
+                       h4("Error Esperado (Esperado): Este es el error que anticipas podría existir en tu población. Un valor más alto implica que esperas
+                          más variabilidad en los datos, lo que se traduce en necesitar una muestra más grande para obtener estimaciones precisas.",align = "left"),
+                       h4("Nivel de Confianza: Cuanto mayor sea el nivel de confianza que desees tener en los resultados de tu muestra, mayor deberá
+                          ser el tamaño de la misma. Esto se debe a que un nivel de confianza más alto indica que quieres estar más seguro de que tu 
+                          muestra representa correctamente a toda la población.",align = "left"),
+                       
+                       br(),
+                       h3("Tabla de Referencia para Tamaño de Muestra",align = "left"),
+            
+            fluidRow(
+              box(
+                title = "Tabla de Datos",
+                status = "primary",
+                solidHeader = TRUE,
+                collapsible = TRUE,
+                width = 12,  # Ocupará todo el ancho disponible
+                div(style = "height: 180px;",  # Establece el alto de la tabla
+                    reactableOutput("SugerenciasTamaño")
+              )
+              )
+            ),
+            
+                       br(),
+                       h4("Utilizando los controles deslizantes de tu aplicación, los usuarios pueden ajustar estos parámetros para determinar un tamaño 
+                          de muestra que sea adecuado para sus necesidades específicas. A continuación, se muestra una tabla de referencia actualizada que
+                          podría ayudar a los usuarios a entender cómo estos ajustes podrían influir en el tamaño de la muestra requerido:",align = "left"),
+                       br(),
+                        
+                       h4("Nota:",align = "left"),
+            
                        sliderInput("freq1",
                                    "Tolerable:",
                                    min = 0.01,  max = 0.99, value = 0.05),
