@@ -17,67 +17,81 @@ body <- dashboardBody(
             h1("Guía de Usuario para la Aplicación Shiny de Análisis de Muestras para Unidades Financieras.", align = "center"),
             br(),
             br(),
-            h2("Introducción", align = "left"),
+            h2("Introducción", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
-            h4("Bienvenido a nuestra aplicación Shiny especializada en el análisis de muestras para unidades financieras. Esta herramienta interactiva
-               ha sido meticulosamente diseñada para facilitar la evaluación y el manejo de datos financieros, optimizando así el proceso de toma de 
-               decisiones y el análisis de auditoría." ,align = "left"),
+            h4("Bienvenido a la aplicación Shiny especializada en el análisis de muestras para unidades financieras. Esta herramienta interactiva
+               ha sido diseñada para facilitar el proceso de descripción, muestreo de auditoria y la evaluación de un conjunto de datos financieros." ,align = "left"),
             br(),
             br(),
-            h2("Estructura de la Aplicación", align = "left"),
+            h2("Estructura de la Aplicación", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
             h4("La aplicación se divide en tres módulos principales, cada uno enfocado en un aspecto crítico del análisis de datos:",align = "left"),
             br(),
-            h4("1. Análisis Descriptivo",align = "left"),
-            h4("2. Proceso de Muestreo",align = "left"),
-            h4("3. Evaluación de la Muestra",align = "left"),
+            tags$ul(
+              style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
+              tags$li(h4("Análisis Descriptivo", align = "left")),
+              tags$li(h4("Proceso de Muestreo", align = "left")),
+              tags$li(h4("Evaluación de la Muestra", align = "left"))
+            ),
+            br(),
             h4("A continuación, exploramos en detalle cada uno de estos módulos.",align = "left"),
             br(),
             br(),
-            h2("Análisis Descriptivo", align = "left"),
+            h2("Análisis Descriptivo", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
-            h4("Antes de embarcarnos en el muestreo, es esencial comprender el conjunto de datos con el que trabajaremos. En el módulo de Análisis Descriptivo, los usuarios pueden:",align = "left"),
+            h4("Antes de abordar el proceso de muestreo (tamaño de muestra y selección de las unidades), es esencial comprender el conjunto de datos con el que se trabajará. En el módulo de Análisis Descriptivo, los usuarios podrán:",align = "left"),
             br(),
-            h4("Inspeccionar las características fundamentales del conjunto de datos a través de estadísticas descriptivas.",align = "left"),
-            h4("Detectar y abordar anomalías como datos faltantes o valores atípicos que podrían comprometer la calidad del análisis.",align = "left"),
-            h4("Detectar y abordar anomalías como datos faltantes o valores atípicos que podrían comprometer la calidad del análisis.",align = "left"),
-            br(),
-            br(),
-            h2("Proceso de Muestreo", align = "left"),
-            br(),
-            h4("Tras un entendimiento completo del conjunto de datos, procedemos al Proceso de Muestreo. Esta etapa consta de:",align = "left"),
-            br(),
-            h4("La determinación del tamaño de la muestra, utilizando técnicas estadísticas que garanticen la representatividad.", align = "left"),
-            h4("La selección aleatoria de las unidades de muestreo que serán analizadas, siguiendo el tamaño de muestra definido.", align = "left"),
+            tags$ul(
+              style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
+              tags$li(h4("Análisar las principalres estadísticas descriptivas de la variable de interés.", align = "left")),
+              tags$li(h4("Analisar la distribución de la variable de interés.", align = "left")),
+              tags$li(h4("Según el análisis de la distribución de la variable de interés, tener una mejor idea del ajuste de la función de distribución.", align = "left"))
+            ),
             br(),
             br(),
-            h2("Evaluación de la Muestra", align = "left"),
+            h2("Proceso de Muestreo", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
-            h4("El último módulo, Evaluación de la Muestra, es para obtener un contraste empírico sobre el resultado de la auditoria. Aquí:",align = "left"),
+            h4("Tras un entendimiento  del conjunto de datos, se procede con la etapa del Muestreo. Esta etapa consta de:",align = "left"),
             br(),
-            h4("Comparamos los resultados muestrales con los datos originales para evaluar su consistencia.", align = "left"),
-            h4("Ofrecemos visualizaciones y tablas detalladas que facilitan la interpretación de los resultados.", align = "left"),
-            h4("mplementamos pruebas empíricas que ayudan a detectar discrepancias o hallazgos relevantes para la auditoría.", align = "left"),
+            tags$ul(
+              style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
+              tags$li(h4("Determinar el tamaño de muestra.", align = "left")),
+              tags$li(h4("Visualizar la selección de los montos según el tamaño de muestra anterior.", align = "left")),
+              tags$li(h4("Comprar distribuciones entre los datos orginales y los obtenidos por la muestra.", align = "left")),
+              tags$li(h4("Descargar los datos seleccionados en el proceso de muestreo.", align = "left"))
+            ),
             br(),
             br(),
-            h2("Sobre la carga de datos", align = "left"),
+            h2("Evaluación de la Muestra", align = "left", style = "font-weight: bold; text-decoration: underline;"),
+            br(),
+            h4("El último módulo, Evaluación de la Muestra, es para obtener un contraste empírico referente al proceso de la auditoria. En esta sección:",align = "left"),
+            br(),
+            tags$ul(
+              style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
+              tags$li(h4("Se comparan los resultados de una muestra antes seleccionados a nivel visual y los valores que presentan diferencias.", align = "left")),
+              tags$li(h4("Se realiza un cuadro con datos de interés del proceso de muestreo", align = "left")),
+              tags$li(h4("Se brinda un resultado empírico sobre el proceso de Auditoría.", align = "left"))
+            ),
+            
+            br(),
+            h2("Sobre la carga de datos", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
             h4("Para cada uno de los módulos anteriores, deberá cargar un archivo de datos. La aplicación admite múltiples formatos incluyendo .xlsx, .txt y .csv. Tenga en cuenta que:",align = "left"),
             br(),
-            h4("Cada archivo cargado debe contener una sola tabla.",align = "left" ),
-            h4("Los datos deben estar limpios, listo para ser analizados.",align = "left" ),
-            h4("El peso máximo permitido por archivo es de 100 megabytes, asegurando así la fluidez y eficiencia de la aplicación.",align = "left" ),
+            tags$ul(
+              style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
+              tags$li(h4("Cada archivo cargado debe contener una sola tabla.", align = "left", style = "font-weight: bold")),
+              tags$li(h4("Los datos deben estar limpios, listo para ser analizados.", align = "left", style = "font-weight: bold")),
+              tags$li(h4("El peso máximo permitido por archivo es de 100 megabytes, asegurando así la fluidez y eficiencia de la aplicación.", align = "left", style = "font-weight: bold"))
+            ),
             br(),
-            br(),
-            h2("Inicie utilizando la App!", align = "left"),
+            h2("Inicie utilizando la App!", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
             h4("Para comenzar con la aplicación:",align = "left"),
             br(),
             h4("Cargar Datos: Utilice el botón de carga de archivos para subir su conjunto de datos en el formato adecuado.",align = "left"),
             h4("Navegación: Mueva entre los diferentes módulos utilizando las pestañas dispuestas en la interfaz de usuario.",align = "left"),
             h4("Análisis: Siga las instrucciones específicas en cada módulo para realizar el análisis deseado.",align = "left"),
-            br(),
-            br(),
             br(),
             br()
             
@@ -219,7 +233,7 @@ body <- dashboardBody(
                 status = "primary",
                 solidHeader = TRUE,
                 collapsible = TRUE,
-                width = 12,  # Ocupará todo el ancho disponible
+                width = 8,  # Ocupará todo el ancho disponible
                 div(style = "height: 180px;",  # Establece el alto de la tabla
                     reactableOutput("SugerenciasTamaño")
               )
@@ -268,13 +282,23 @@ body <- dashboardBody(
                            reactableOutput("sample")  
                          )
                        ),
-            
+                       br(),
             #################################################
             #    Comparación de datos originales y muestra  #
             #################################################
                        
                   h3("Comprarción de datos vs muestra seleccionada"),
-            
+                  br(),
+            fluidRow(
+              box(
+                title = "Comparación de distribuciones entre datos originales y la muestra de datos",
+                status = "primary",
+                solidHeader = TRUE,
+                collapsible = TRUE,
+                width = 8,
+                highchartOutput("comp_dist")  
+              )
+            ),
             
                        #################################
                        #         Descargar muestra     #
@@ -322,22 +346,7 @@ body <- dashboardBody(
                       min = 0.01,  max = 0.99, value = 0.05),
           selectInput("method", "Seleccione el método de evaluación:",  
                       list(`Tipo` = list( "poisson", 
-                                          "binomial",
-                                          "hypergeometric",
-                                          "stringer.poisson",
-                                          "stringer.binomial", 
-                                          "stringer.hypergeometric",
-                                          "stringer.meikle",
-                                          "stringer.lta", 
-                                          "stringer.pvz",
-                                          "rohrbach", 
-                                          "moment", 
-                                          "coxsnell", 
-                                          "mpu",
-                                          "direct",
-                                          "difference", 
-                                          "quotient", 
-                                          "regression"
+                                          "binomial"
                       )
                       )
           ),
@@ -362,6 +371,7 @@ body <- dashboardBody(
               div(style = "height: 400px;",  # Establece el alto de la tabla
                   reactableOutput("Tabla2"))
             ),
+            div(style = "height: 30px;"),  # Espacio entre los boxes
             box(
               title = "Gráfico de Dispersión",
               status = "primary",
@@ -369,8 +379,21 @@ body <- dashboardBody(
               collapsible = TRUE,
               width = 12,  # Ocupará todo el ancho disponible
               highchartOutput("ScatterPlot", height = "400px")  # Establece el alto del gráfico Highcharter
+            ),
+            box(
+              title = "Diferencias",
+              status = "primary",
+              solidHeader = TRUE,
+              collapsible = TRUE,
+              width = 12,  # Ocupará todo el ancho disponible
+              div(style = "height: 400px;",  # Establece el alto de la tabla
+                  reactableOutput("Tabla3"))
             )
-          ),
+            
+          )
+          
+          
+          ,
           br(),
           h3("Evaluación en la comparación del valor observador vs valor auditado"),
           br(),

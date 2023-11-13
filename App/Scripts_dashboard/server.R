@@ -306,9 +306,26 @@ server <- function(input, output, session) {
   #    Comparación de datos originales y muestra  #
   #################################################
   
-
-  
-  
+  output$comp_dist <- renderHighchart({
+    # Asegúrate de que tanto los datos originales como la muestra estén disponibles
+    req(data2(), Muestra(), input$variable2)
+    
+    # Calcular la densidad para los datos originales
+    dens_orig <- density(data2()[[input$variable2]], na.rm = TRUE)
+    dens_orig_df <- data.frame(x = dens_orig$x, y = dens_orig$y)
+    
+    # Calcular la densidad para la muestra
+    dens_muestra <- density(Muestra()[[input$variable2]], na.rm = TRUE)
+    dens_muestra_df <- data.frame(x = dens_muestra$x, y = dens_muestra$y)
+    
+    # Crear el gráfico de densidad comparativa
+    highchart() %>%
+      hc_add_series(name = "Datos Originales", data = list_parse(dens_orig_df), type = "area", color = "skyblue") %>%
+      hc_add_series(name = "Muestra", data = list_parse(dens_muestra_df), type = "area", color = "green") %>%
+      hc_tooltip(crosshairs = TRUE, valueDecimals = 1, shared = TRUE, borderWidth = 5) %>%
+      hc_chart(zoomType = "xy") %>%
+      hc_title(text = "Comparación de Densidades")
+  })
 
   #################################
   #         Descargar muestra     #
@@ -438,6 +455,26 @@ server <- function(input, output, session) {
       
     })
     
+    output$Tabla3 <- renderReactable({
+      req(input$select_var1, input$select_var2)  # Asegurarse de que las entradas estén disponibles
+      
+      # Asegúrate de que los nombres de las columnas existan en data3()
+      Datos <- data3() %>%
+        dplyr::rename(
+          Observado = input$select_var1,
+          Auditado = input$select_var2
+        )
+      
+      # Calcula la diferencia y filtra para mostrar solo las diferencias
+      Diferencias <- Datos %>%
+        mutate(Diferencia = abs(Datos$Observado - Datos$Auditado)) %>%
+        filter(Diferencia != 0) %>% 
+        dplyr::arrange(desc(Diferencia))
+         
+        
+      reactable(Diferencias)
+    })
+    
     
     
   })
@@ -446,21 +483,6 @@ server <- function(input, output, session) {
   # Structura #
   
   
-  observeEvent(input$analizar, {
-    output$eval <- renderPrint({
-      
-      stage4 <- evaluation(
-        materiality = 0.03, 
-        method = "stringer",
-        conf.level = 0.95, 
-        data = data2(),
-        values = input$select_var1,
-        values.audit = input$select_var2
-      )
-      
-      summary(stage4)
-      
-    })
-  })
+
   
 }
