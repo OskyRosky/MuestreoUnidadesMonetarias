@@ -115,6 +115,9 @@ body <- dashboardBody(
                       )),
             uiOutput("variable_select_1"),
             br(),
+            actionButton("start_analysis", "Iniciar Análisis Descriptivos", class = "btn-primary"),
+            uiOutput("analysis_output"),
+            br(),
             h3("Estadíticas descriptivas", align = "left"),
             reactableOutput("stats"), # Salida para la tabla de estadísticas   ---->  reactableOutput()
             br(),

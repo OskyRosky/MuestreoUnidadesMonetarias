@@ -58,80 +58,7 @@ server <- function(input, output, session) {
     }
   })
   
-  
-  # Histograma de una variable #
-    
-  output$histogram1 <- renderHighchart({
-    
-    req(input$variable1)
-    
-    datos <- as.data.frame(data1()[[input$variable1]])  %>% 
-      dplyr::rename(
-        Monto = `data1()[[input$variable1]]`
-        
-      )
-    
-    x = datos$Monto
-    
-   hist <-  hchart(density(x), type = "area", color = "skyblue", name = "Monto")  %>%
-                
-     hc_tooltip(crosshairs = T,valueDecimals = 1, shared = TRUE, borderWidth = 5) %>%
-     hc_chart(
-       zoomType = "xy"
-     )
-    
-    
-   hist 
-   
-    #  ggplot(data1(), aes_string(input$variable1)) + geom_histogram(binwidth = 10) + labs(title = paste("Distribución de frecuencia.", input$variable), x = input$variable, y = "Frecuencia")
-  })
-  
 
-  # Tabla de estadísticas descriptivas #
-  
-  output$stats <- renderReactable({
-    
-  
-    
-    
-    Datos <- as.data.frame(data1()[[input$variable1]])  %>% 
-                                              dplyr::rename(
-                                                Monto = `data1()[[input$variable1]]`
-                                                
-                                              )
-    
-    
-    Stats <- Datos %>%
-      
-                             summarise(  ValoresNegativos = sum(Monto < 0, na.rm = TRUE),
-                                         ValoresFaltantes = sum(is.na(Monto)),
-                                         Minimo = min(Monto, na.rm = TRUE),
-                                         Maximo = max(Monto, na.rm = TRUE),
-                                         Promedio = mean(Monto, na.rm = TRUE),
-                                          Mediana = median(Monto, na.rm = TRUE),
-                                         Moda = as.numeric(names(sort(table(Monto), decreasing = TRUE)[1])),
-                                          DesviacionEstandar = sd(Monto, na.rm = TRUE),
-                                          Percentil10 = quantile(Monto, 0.1, na.rm = TRUE),
-                                          Percentil25 = quantile(Monto, 0.25, na.rm = TRUE),
-                                         Percentil50 = quantile(Monto, 0.50, na.rm = TRUE),
-                                         Percentil75 = quantile(Monto, 0.75, na.rm = TRUE),
-                                         Percentil90 = quantile(Monto, 0.90, na.rm = TRUE)
-
-                                         
-                                          
-      ) %>% pivot_longer(
-        cols = everything(),
-        names_to = "Medida",
-        values_to = "Valor"
-      )  %>%
-               mutate(Valor = round(Valor, 1))
-      
-    
-        
-        reactable(Stats, defaultPageSize = 15)
-
-  })
-  
   # Genera datos binomiales
   n_binom <- 10000  # Número de observaciones
   size <- 100       # Número de ensayos
@@ -145,23 +72,108 @@ server <- function(input, output, session) {
   outliers <- c(sample(80:100, size = 10, replace = TRUE)) # Genera algunos valores extremos
   datos_pois_extremos <- c(rpois(n_pois, lambda), outliers)
   
-  # Output del gráfico binomial
-  output$binomialPlot <- renderPlot({
-    ggplot(data.frame(Valor = datos_binom), aes(x = Valor)) +
-      geom_histogram(binwidth = 1, fill = 'skyblue', color = 'black') +
-      labs(title = "Distribución Binomial", x = "", y = "Frecuencia")
-  })
-  
-  # Output del gráfico de Poisson
-  output$poissonPlot <- renderPlot({
-    ggplot(data.frame(Valor = datos_pois_extremos), aes(x = Valor)) +
-      geom_histogram(bins = 120, fill = 'skyblue', color = 'black') +
-      labs(title = "Distribución de Poisson con valores extremos",
-           x = "", y = "Frecuencia")
-  })
 
-  
-  
+    observeEvent(input$start_analysis, {
+        # Tabla de estadísticas descriptivas
+      
+      
+      
+        output$stats <- renderReactable({
+            req(data1())
+          
+          
+          Datos <- as.data.frame(data1()[[input$variable1]])  %>% 
+            dplyr::rename(
+              Monto = `data1()[[input$variable1]]`
+              
+            )
+          
+          
+          Stats <- Datos %>%
+            
+            summarise(  ValoresNegativos = sum(Monto < 0, na.rm = TRUE),
+                        ValoresFaltantes = sum(is.na(Monto)),
+                        Minimo = min(Monto, na.rm = TRUE),
+                        Maximo = max(Monto, na.rm = TRUE),
+                        Promedio = mean(Monto, na.rm = TRUE),
+                        Mediana = median(Monto, na.rm = TRUE),
+                        Moda = as.numeric(names(sort(table(Monto), decreasing = TRUE)[1])),
+                        DesviacionEstandar = sd(Monto, na.rm = TRUE),
+                        Percentil10 = quantile(Monto, 0.1, na.rm = TRUE),
+                        Percentil25 = quantile(Monto, 0.25, na.rm = TRUE),
+                        Percentil50 = quantile(Monto, 0.50, na.rm = TRUE),
+                        Percentil75 = quantile(Monto, 0.75, na.rm = TRUE),
+                        Percentil90 = quantile(Monto, 0.90, na.rm = TRUE)
+                        
+                        
+                        
+            ) %>% pivot_longer(
+              cols = everything(),
+              names_to = "Medida",
+              values_to = "Valor"
+            )  %>%
+            mutate(Valor = round(Valor, 1))
+          
+          
+          
+          reactable(Stats, defaultPageSize = 15)
+        })
+
+        
+        
+        # Histograma de una variable
+        output$histogram1 <- renderHighchart({
+          
+            req(data1(), input$variable1)
+          
+          
+          req(input$variable1)
+          
+          datos <- as.data.frame(data1()[[input$variable1]])  %>% 
+            dplyr::rename(
+              Monto = `data1()[[input$variable1]]`
+              
+            )
+          
+          x = datos$Monto
+          
+          hist <-  hchart(density(x), type = "area", color = "skyblue", name = "Monto")  %>%
+            
+            hc_tooltip(crosshairs = T,valueDecimals = 1, shared = TRUE, borderWidth = 5) %>%
+            hc_chart(
+              zoomType = "xy"
+            )
+          
+          hist 
+        })
+
+        
+        
+        # Gráfico binomial
+        output$binomialPlot <- renderPlot({
+          
+          ggplot(data.frame(Valor = datos_binom), aes(x = Valor)) +
+            geom_histogram(binwidth = 1, fill = 'skyblue', color = 'black') +
+            labs(title = "Distribución Binomial", x = "", y = "Frecuencia")
+          
+        })
+        
+        
+
+        # Gráfico de Poisson
+        output$poissonPlot <- renderPlot({
+          
+          ggplot(data.frame(Valor = datos_pois_extremos), aes(x = Valor)) +
+            geom_histogram(bins = 120, fill = 'skyblue', color = 'black') +
+            labs(title = "Distribución de Poisson con valores extremos",
+                 x = "", y = "Frecuencia")
+          
+        })
+    })
+
+    # ... (cualquier otro código que necesites)
+
+
 
   
   #################################################################################
