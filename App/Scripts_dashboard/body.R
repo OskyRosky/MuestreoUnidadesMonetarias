@@ -16,16 +16,25 @@ body <- dashboardBody(
             
             h1("Guía de Usuario para la Aplicación Shiny de Análisis de Muestras para Unidades Financieras.", align = "center"),
             br(),
-            br(),
             h2("Introducción", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
-            h4("Bienvenido a la aplicación Shiny especializada en el análisis de muestras para unidades financieras. Esta herramienta interactiva
-               ha sido diseñada para facilitar el proceso de descripción, muestreo de auditoria y la evaluación de un conjunto de datos financieros." ,align = "left"),
+            h4("Bienvenido a la aplicación Shiny especializada en el análisis de muestras para unidades financieras.",align = "left"),
+            h4("Esta herramienta interactiva ha sido diseñada para facilitar el proceso de descripción, muestreo de auditoria y la evaluación de un conjunto de datos financieros." ,align = "left"),
             br(),
+            h2("¡Inicie utilizando la App!", align = "left", style = "font-weight: bold; text-decoration: underline;"),
+            br(),
+            h4("Para comenzar con la aplicación, en cada sección deberá:",align = "left"),
+            br(),
+            h4("Navegación",align = "left", style = "font-weight: bold"),
+            h4("Mueva entre los diferentes módulos utilizando las pestañas dispuestas en la interfaz de usuario."),
+            h4("Cargar Datos", align = "left", style = "font-weight: bold"), 
+            h4("Utilice el botón de carga de archivos para subir su conjunto de datos en el formato adecuado." ,align = "left"),
+            h4("Análisis: ",align = "left", style = "font-weight: bold"),
+            h4("Siga las instrucciones específicas en cada módulo para realizar el análisis deseado."),
             br(),
             h2("Estructura de la Aplicación", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
-            h4("La aplicación se divide en tres módulos principales, cada uno enfocado en un aspecto crítico del análisis de datos:",align = "left"),
+            h4("La aplicación se divide en tres módulos, cada uno enfocado en un aspecto crítico:",align = "left"),
             br(),
             tags$ul(
               style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
@@ -35,7 +44,6 @@ body <- dashboardBody(
             ),
             br(),
             h4("A continuación, exploramos en detalle cada uno de estos módulos.",align = "left"),
-            br(),
             br(),
             h2("Análisis Descriptivo", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
@@ -48,7 +56,6 @@ body <- dashboardBody(
               tags$li(h4("Según el análisis de la distribución de la variable de interés, tener una mejor idea del ajuste de la función de distribución.", align = "left"))
             ),
             br(),
-            br(),
             h2("Proceso de Muestreo", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
             h4("Tras un entendimiento  del conjunto de datos, se procede con la etapa del Muestreo. Esta etapa consta de:",align = "left"),
@@ -60,7 +67,6 @@ body <- dashboardBody(
               tags$li(h4("Comprar distribuciones entre los datos orginales y los obtenidos por la muestra.", align = "left")),
               tags$li(h4("Descargar los datos seleccionados en el proceso de muestreo.", align = "left"))
             ),
-            br(),
             br(),
             h2("Evaluación de la Muestra", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
@@ -83,19 +89,9 @@ body <- dashboardBody(
               tags$li(h4("Cada archivo cargado debe contener una sola tabla.", align = "left", style = "font-weight: bold")),
               tags$li(h4("Los datos deben estar limpios, listo para ser analizados.", align = "left", style = "font-weight: bold")),
               tags$li(h4("El peso máximo permitido por archivo es de 100 megabytes, asegurando así la fluidez y eficiencia de la aplicación.", align = "left", style = "font-weight: bold"))
-            ),
-            br(),
-            h2("Inicie utilizando la App!", align = "left", style = "font-weight: bold; text-decoration: underline;"),
-            br(),
-            h4("Para comenzar con la aplicación:",align = "left"),
-            br(),
-            h4("Cargar Datos: Utilice el botón de carga de archivos para subir su conjunto de datos en el formato adecuado.",align = "left"),
-            h4("Navegación: Mueva entre los diferentes módulos utilizando las pestañas dispuestas en la interfaz de usuario.",align = "left"),
-            h4("Análisis: Siga las instrucciones específicas en cada módulo para realizar el análisis deseado.",align = "left"),
-            br(),
-            br()
-            
+            )
     ),
+            
     
     #################################################################################
     #################################################################################
@@ -109,8 +105,18 @@ body <- dashboardBody(
             br(),
             h2("En este sección:", align = "left"),
             br(),
-            h4("Poner una descipción del apartado", align ="left"),
-            
+            h4("Se analiza de forma descriptiva el conjunto de datos.", align ="left"),
+            br(),
+            h4("Cargado los datos, usted podrá:"),
+            br(),
+            tags$ul(
+              style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
+              tags$li(h4("Conocer las principales estadísticas descriptivas de la variable seleccionada.", align = "left")),
+              tags$li(h4("Visualizar la distribución de la variable seleccionada (densidad).", align = "left",)),
+              tags$li(h4("Comprar la distribución de la variable seleccionada con respecto a una distribución de poisson o binomial.", align = "left"))
+            ),
+            br(),
+            h4("Este último punto lo guirará en el proceso de la siguiente sección, en donde deberá seleccionar la distribución que aproximada más al conjunto de datos em la determinación del tamaño de muestra"),
             br(),
             
             h3("Cargar datos", align = "left"),
@@ -144,10 +150,8 @@ body <- dashboardBody(
             # highchartOutput("histogram1"),
 
             h3("Comparación de Ajuste de Distribuciones", align = "left"),
-            h4("Si posee datos aglomerados o consistentes en todo el rango de posibles valores, es mejor que opte por un ajuste Binomial. Caso contrario,
-               datos que están muy alejados de la aglomeración y presentan uno o varios valores extremos, es mejor que opte por un ajuste dedistrubición
-               de poisson. Por favor, guiarse según las siguientes gráficas de distrubución.", align = "left"),
             br(),
+            h4("Por favor, guiarse según las siguientes gráficas de distrubución."),
             fluidRow(
               box(
                 title = "Comparación de distribuciones",
@@ -166,7 +170,10 @@ body <- dashboardBody(
                   )
                 )
               )
-            )
+            ),
+            h4("Si posee datos aglomerados o consistentes en todo el rango de posibles valores, es mejor que opte por un ajuste Binomial. Caso contrario,
+               datos que están muy alejados de la aglomeración y presentan uno o varios valores extremos, es mejor que opte por un ajuste dedistrubición
+               de poisson.", align = "left")
             
 
     ),
@@ -185,10 +192,18 @@ body <- dashboardBody(
             br(),
             h2("En este sección:", align = "left"),
             br(),
-            h4("Poner una descipción del apartado", align ="left"),
-            
+            h4("Se lleva a cabo el proceso de muestreo: tamaño y selección de la unidaddes", align ="left"),
             br(),
-            
+            h4("Cargado los datos, usted podrá:"),
+            br(),
+            tags$ul(
+              style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
+              tags$li(h4("Calcular el tamaño de muestra.", align = "left")),
+              tags$li(h4("Visualizar las unidades selecciondas.", align = "left",)),
+              tags$li(h4("Comprar la los datos cargados vs los datos obtenidos por la muestra.", align = "left")),
+              tags$li(h4("Descargar los datos de la muestra en formato, ya sea .csv, .txt y .xlsx", align = "left"))
+            ),
+            br(), 
             
             h3("Cargar datos", align = "left"),
                        br(),
@@ -204,10 +219,13 @@ body <- dashboardBody(
                                  )),
                        br(),
                        uiOutput("variable_select"),
+                       br(),
             #           plotOutput("histogram2"),
                        h2("Muestreo: tamaño y selección", align = "left"),
                        br(),
-                       h4("Poner acá texto",align = "left"),
+                       h4("El proceso de muestreo consta de dos etapas: selección del tamaño de la muestra y la selección de las unidades",align = "left"),
+                       h4("Se aborda primeramente la determinación del tamaño de la muestra. Se deberán seleccionar el tamaño según la elección de los parámetros de erores tolarebles, esperados u nivel de confianza."),  
+                       h4("La selección de las unidades para completar el tamaño de muestra, se visualiza en términos de una tabla. Se aplicó el método de selección Proporcional Por Tamaño, la cual brinda mayor probabilidad de ser seleccinadas a las unidades con montos mayores."),
                        br(),
                        h3("Cálculo de tamaño de muestra"),
                        br(),
@@ -264,7 +282,8 @@ body <- dashboardBody(
                        sliderInput("freq3",
                                    "Nivel de confianza:",
                                    min = 0.01,  max = 0.99, value = 0.95),
-                       actionButton("update", "Calcular"),
+                       br(),
+                       actionButton("update", "Análsis del muestreo.", class = "btn-primary"),
                        hr(),
                        fluidRow(
                          box(
@@ -287,11 +306,11 @@ body <- dashboardBody(
             #    Comparación de datos originales y muestra  #
             #################################################
                        
-                  h3("Comprarción de datos vs muestra seleccionada"),
+                  h3("Comprarción de datos cargados vs muestra seleccionada"),
                   br(),
             fluidRow(
               box(
-                title = "Comparación de distribuciones entre datos originales y la muestra de datos",
+                title = "Comparación de distribuciones entre datos cargados y las unidaddes seleccionadas a partir de la muestra de datos",
                 status = "primary",
                 solidHeader = TRUE,
                 collapsible = TRUE,
@@ -322,9 +341,15 @@ body <- dashboardBody(
           br(),
           h2("En este sección:", align = "left"),
           br(),
-          h4("Poner una descipción del apartado", align ="left"),
-          
+          h4("Cargado los datos, usted podrá:"),
           br(),
+          tags$ul(
+            style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
+            tags$li(h4("Comparar la información de los datos observados vs los datos auditados.", align = "left")),
+            tags$li(h4("Indicadores de riesgo en le proceso de comparación entre la información de los datos observados vs los datos auditados.", align = "left",)),
+            tags$li(h4("Criterio empírico sobre el proceso de evaluación de la muestra por unidades monetarias.", align = "left"))
+          ),
+          br(), 
           
           h3("Cargar datos", align = "left"),
           br(),
@@ -357,10 +382,10 @@ body <- dashboardBody(
           uiOutput("var1"),
           uiOutput("var2"),
           br(),
-          actionButton("analizar", "Analizar Correlación"),
+          actionButton("analizar", "Evaluación", class = "btn-primary"),
           br(),
+          h2("Comparar la información de los datos observados vs los datos auditados."),
           br(),
-
           fluidRow(
             box(
               title = "Tabla de Datos",
@@ -395,11 +420,10 @@ body <- dashboardBody(
           
           ,
           br(),
-          h3("Evaluación en la comparación del valor observador vs valor auditado"),
+          h2("Indicadores de riesgo en la comparación de la información de los datos observados vs los datos auditados."),
           br(),
           br(),
-          h3("Resumen de evaluación de muestras de auditoría "),
-          verbatimTextOutput("eval"),
+          h2("Criterio empírico de evaluación de la muestra auditada."),
           br()
           
   )
