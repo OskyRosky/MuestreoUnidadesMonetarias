@@ -472,6 +472,46 @@ server <- function(input, output, session) {
       reactable(Riesgo)
     })
     
+    # Creación de la función de indicadores de riesgo
+    
+    IndicadoresRiesgo <- function(datos) {
+      suma_obs <- round(sum(datos$Observado, na.rm = TRUE), 1)
+      suma_aud <- round(sum(datos$Auditado, na.rm = TRUE), 1)
+      n_obs <- nrow(datos)
+      n_aud <- nrow(datos)
+      promedio_obs <- round(mean(datos$Observado, na.rm = TRUE), 1)
+      promedio_aud <- round(mean(datos$Auditado, na.rm = TRUE), 1)
+      conteo_dif <- sum(datos$Observado != datos$Auditado, na.rm = TRUE)
+      sobrevaloraciones <- sum(datos$Observado > datos$Auditado, na.rm = TRUE)
+      infravaloraciones <- sum(datos$Observado < datos$Auditado, na.rm = TRUE)
+      suma_sobrevaloraciones <- round(sum(datos$Observado[datos$Observado > datos$Auditado] - datos$Auditado[datos$Observado > datos$Auditado], na.rm = TRUE), 1)
+      suma_infravaloraciones <- round(sum(datos$Auditado[datos$Observado < datos$Auditado] - datos$Observado[datos$Observado < datos$Auditado], na.rm = TRUE), 1)
+      dif_total <- round(sum(abs(datos$Observado - datos$Auditado), na.rm = TRUE), 1)
+      porcentaje_dif <- round((dif_total / suma_aud) * 100, 1)
+      
+      data.frame(
+        Indicador = c("Suma total Observados", "Suma total Auditados", "n Observados", "n Auditados", 
+                      "Monto promedio Observado", "Monto promedio Auditado", "Conteo Observados vs Auditado",
+                      "Cantidad de sobrevaloraciones", "Cantidad de infravaloraciones",
+                      "Diferencia total Observados y Auditados", "Suma de sobrevaloraciones", 
+                      "Suma de infravaloraciones", "Porcentaje de diferencia"),
+        Valor = c(suma_obs, suma_aud, n_obs, n_aud, promedio_obs, promedio_aud, conteo_dif, 
+                  sobrevaloraciones, infravaloraciones, dif_total, suma_sobrevaloraciones, 
+                  suma_infravaloraciones, porcentaje_dif)
+      )
+    }
+    
+    # Tabla de los indicadores de riesgo  
+    
+    output$Riesgo <- renderReactable({
+      req(DatosEval())  # Asegúrate de que DatosEval esté disponible
+      tabla_riesgo <- IndicadoresRiesgo(DatosEval())
+      reactable(tabla_riesgo)
+    })
+    
+    
+    
+    
     
     
   })

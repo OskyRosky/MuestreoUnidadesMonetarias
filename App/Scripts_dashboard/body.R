@@ -431,7 +431,17 @@ body <- dashboardBody(
          width = 8,  # Ocupará todo el ancho disponible
          div(style = "height: 400px;",  # Establece el alto de la tabla
              reactableOutput("Riesgo"))
-                )
+                ),
+         box(
+           title = "Indicados de riesgo de evaluación",
+           status = "primary",
+           solidHeader = TRUE,
+           collapsible = TRUE,
+           width = 8,  # Ocupará todo el ancho disponible
+           div(style = "height: 400px;",  # Establece el alto de la tabla
+               reactableOutput("Audit"))
+         )
+         
              ),
           br(),
           h2("Criterio empírico de evaluación de la muestra auditada."),
