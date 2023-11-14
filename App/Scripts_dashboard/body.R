@@ -366,18 +366,18 @@ body <- dashboardBody(
                     )),
           h3("Seleccionar los parametros para la evaluación de los valores observados y auditados."),
           br(),
-          sliderInput("freq20",
-                      "Tolerable:",
-                      min = 0.01,  max = 0.99, value = 0.05),
-          selectInput("method", "Seleccione el método de evaluación:",  
-                      list(`Tipo` = list( "poisson", 
-                                          "binomial"
-                      )
-                      )
-          ),
-          sliderInput("freq21",
-                      "Nivel de confianza:",
-                      min = 0.01,  max = 0.99, value = 0.95),
+          #      sliderInput("freq20",
+          #            "Tolerable:",
+          #            min = 0.01,  max = 0.99, value = 0.05),
+     #     selectInput("method", "Seleccione el método de evaluación:",  
+     #                 list(`Tipo` = list( "poisson", 
+     #                                      "binomial"
+     #                  )
+     #                  )
+     #      ),
+     #      sliderInput("freq21",
+     #                  "Nivel de confianza:",
+     #                  min = 0.01,  max = 0.99, value = 0.95),
           
           uiOutput("var1"),
           uiOutput("var2"),
@@ -392,7 +392,7 @@ body <- dashboardBody(
               status = "primary",
               solidHeader = TRUE,
               collapsible = TRUE,
-              width = 12,  # Ocupará todo el ancho disponible
+              width = 8,  # Ocupará todo el ancho disponible
               div(style = "height: 400px;",  # Establece el alto de la tabla
                   reactableOutput("Tabla2"))
             ),
@@ -402,7 +402,7 @@ body <- dashboardBody(
               status = "primary",
               solidHeader = TRUE,
               collapsible = TRUE,
-              width = 12,  # Ocupará todo el ancho disponible
+              width = 8,  # Ocupará todo el ancho disponible
               highchartOutput("ScatterPlot", height = "400px")  # Establece el alto del gráfico Highcharter
             ),
             box(
@@ -410,7 +410,7 @@ body <- dashboardBody(
               status = "primary",
               solidHeader = TRUE,
               collapsible = TRUE,
-              width = 12,  # Ocupará todo el ancho disponible
+              width = 8,  # Ocupará todo el ancho disponible
               div(style = "height: 400px;",  # Establece el alto de la tabla
                   reactableOutput("Tabla3"))
             )
@@ -422,6 +422,17 @@ body <- dashboardBody(
           br(),
           h2("Indicadores de riesgo en la comparación de la información de los datos observados vs los datos auditados."),
           br(),
+          fluidRow(
+             box(
+                title = "Indicados de riesgo de evaluación",
+                status = "primary",
+             solidHeader = TRUE,
+         collapsible = TRUE,
+         width = 8,  # Ocupará todo el ancho disponible
+         div(style = "height: 400px;",  # Establece el alto de la tabla
+             reactableOutput("Riesgo"))
+                )
+             ),
           br(),
           h2("Criterio empírico de evaluación de la muestra auditada."),
           br()

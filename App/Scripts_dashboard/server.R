@@ -403,13 +403,24 @@ server <- function(input, output, session) {
   ###### Variables
   
   output$var1 <- renderUI({
-    selectInput("select_var1", "Seleccione Variable 1:", names(data3()))
+    selectInput("select_var1", "Seleccione Variable 1: Observado", names(data3()))
   })
   
   output$var2 <- renderUI({
-    selectInput("select_var2", "Seleccione Variable 2:", names(data3()))
+    selectInput("select_var2", "Seleccione Variable 2: Auditado", names(data3()))
   })
   
+  ##### Crear data frame reactive ---> DatosEval 
+  
+  DatosEval <- reactive({
+    req(data3(), input$select_var1, input$select_var2)  # Asegúrate de que los datos y las entradas estén disponibles
+    
+    data3() %>%
+      dplyr::rename(
+        Observado = input$select_var1,
+        Auditado = input$select_var2
+      )
+  })
   
   
   ###### Aplicar el boton activar 
@@ -420,59 +431,45 @@ server <- function(input, output, session) {
   
     
     
-    # Para la tabla reactable
+    # Dataframe de los datos 
+    
     output$Tabla2 <- renderReactable({
-      req(input$select_var1, input$select_var2)  # Asegurarse de que las entradas estén disponibles
-      # Asegúrate de que los nombres de las columnas existan en data2()
-      Datos <- data3() %>%
-        dplyr::rename(
-          Observado = input$select_var1,
-          Auditado = input$select_var2
-        )
-      reactable(Datos)
+      
+      reactable(DatosEval())
+      
     })
     
+    # Scatter plot  de  datos de evaluación
     
     output$ScatterPlot <- renderHighchart({
-      # Asegúrate de que las entradas estén disponibles
-      req(input$select_var1, input$select_var2)
-      
-      # Asegúrate de que los nombres de las columnas existan en data2()
-      Datos <- data3() %>%
-        dplyr::rename(
-          Observado = input$select_var1,
-          Auditado = input$select_var2
-        )
-      
-      # Crear el gráfico de dispersión con Highcharter
-      
-      hc <- Datos %>% 
-                hchart('scatter', hcaes(x = Observado, y = Auditado))
-      
-      
+      hc <- DatosEval() %>% 
+        hchart('scatter', hcaes(x = Observado, y = Auditado))
       hc
-      
-      
     })
     
+    # Evaluación únicamente de las diferencias
+    
+    
     output$Tabla3 <- renderReactable({
-      req(input$select_var1, input$select_var2)  # Asegurarse de que las entradas estén disponibles
       
-      # Asegúrate de que los nombres de las columnas existan en data3()
-      Datos <- data3() %>%
-        dplyr::rename(
-          Observado = input$select_var1,
-          Auditado = input$select_var2
-        )
-      
-      # Calcula la diferencia y filtra para mostrar solo las diferencias
-      Diferencias <- Datos %>%
-        mutate(Diferencia = abs(Datos$Observado - Datos$Auditado)) %>%
+      Diferencias <- DatosEval() %>%
+        mutate(Diferencia = abs(Observado - Auditado)) %>%
         filter(Diferencia != 0) %>% 
-        dplyr::arrange(desc(Diferencia))
-         
-        
+        arrange(desc(Diferencia))
+      
       reactable(Diferencias)
+    })
+    
+    # Evaluación únicamente de las diferencias
+    
+    output$Riesgo <- renderReactable({
+      
+      Riesgo <- DatosEval() %>%
+        mutate(Diferencia = abs(Observado - Auditado)) %>%
+        filter(Diferencia != 0) %>% 
+        arrange(desc(Diferencia))
+      
+      reactable(Riesgo)
     })
     
     
