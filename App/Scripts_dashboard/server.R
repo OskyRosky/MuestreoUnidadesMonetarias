@@ -443,8 +443,13 @@ server <- function(input, output, session) {
     
     output$ScatterPlot <- renderHighchart({
       hc <- DatosEval() %>% 
-        hchart('scatter', hcaes(x = Observado, y = Auditado))
-      hc
+        hchart('scatter', hcaes(x = Observado, y = Auditado)) %>% 
+        hc_add_series(data = list_parse(data.frame(x = c(0, max(DatosEval()$Observado)), 
+                                                   y = c(0, max(DatosEval()$Observado)))), 
+                      type = 'line', name = 'y = x') %>% 
+        
+        hc_chart(zoomType = "xy")
+      hc 
     })
     
     # Evaluación únicamente de las diferencias
@@ -509,12 +514,93 @@ server <- function(input, output, session) {
       reactable(tabla_riesgo)
     })
     
+    calculaIndicadoresAudit <- function(datos) {
+      precision_total <- 1 - sum(abs(datos$Observado - datos$Auditado)) / sum(datos$Observado)
+      error_bruto_probable <- max(abs(datos$Observado - datos$Auditado))
+      error_neto_probable <- sum(datos$Observado - datos$Auditado)
+      limite_error_bruto <- mean(abs(datos$Observado - datos$Auditado)) + qnorm(0.95) * sd(abs(datos$Observado - datos$Auditado))
+      limite_error_neto <- mean(datos$Observado - datos$Auditado) + qnorm(0.95) * sd(datos$Observado - datos$Auditado)
+      
+      data.frame(
+        Indicador = c("Precisión Total", "Error Bruto Más Probable", "Error Neto Más Probable", 
+                      "Límites de Error Superior Bruto", "Límite de Error Superior Neto"),
+        Valor = round(c(precision_total, error_bruto_probable, error_neto_probable, limite_error_bruto, limite_error_neto), 1)
+      )
+    }
+    
+    output$Audit <- renderReactable({
+      req(DatosEval())  # Asegúrate de que DatosEval esté disponible
+      tabla_audit <- calculaIndicadoresAudit(DatosEval())
+      reactable(tabla_audit)
+    })
+    
+    output$ScatterPlot_limit <- renderHighchart({
+      req(DatosEval())  # Asegúrate de que los datos están disponibles
+      
+      # Calcular los límites de confianza
+      std_dev <- sd(DatosEval()$Observado - DatosEval()$Auditado, na.rm = TRUE)
+      limite_inferior <- -1.96 * std_dev
+      limite_superior <- 1.96 * std_dev
+      
+      # Crear el gráfico de dispersión base
+      hc <- DatosEval() %>% 
+        hchart('scatter', hcaes(x = Observado, y = Auditado)) %>% 
+        hc_add_series(data = list_parse(data.frame(x = c(0, max(DatosEval()$Observado)), 
+                                                   y = c(0, max(DatosEval()$Observado)))), 
+                      type = 'line', name = 'y = x')  %>%
+        hc_add_series(data = list_parse(data.frame(x = c(0, max(DatosEval()$Observado)), 
+                                                   y = c(limite_inferior, limite_inferior + max(DatosEval()$Observado)))), 
+                      type = 'line', name = 'Límite Inferior' , color = "blue") %>%
+        hc_add_series(data = list_parse(data.frame(x = c(0, max(DatosEval()$Observado)), 
+                                                   y = c(limite_superior, limite_superior + max(DatosEval()$Observado)))), 
+                      type = 'line', name = 'Límite Superior', color = "blue") %>% 
+        
+        hc_chart(zoomType = "xy")
+      
+      hc
+    })
+    
+    calculaIndicadoresEvaluacion <- function(datos) {
+      # Monto en diferencia total Observados y Auditados
+      monto_diferencia_total <- sum(abs(datos$Observado - datos$Auditado))
+      
+      # Porcentaje de diferencia
+      porcentaje_diferencia <- (monto_diferencia_total / sum(datos$Auditado)) * 100
+      
+      # Conteo Observados vs Auditado
+      conteo_diferencias <- sum(datos$Observado != datos$Auditado)
+      
+      # Casos que son superiores o inferiores a los límites de confianza
+      std_dev <- sd(datos$Observado - datos$Auditado)
+      limite_inferior <- -1.96 * std_dev
+      limite_superior <- 1.96 * std_dev
+      casos_fuera_limites <- sum(datos$Observado - datos$Auditado < limite_inferior | 
+                                   datos$Observado - datos$Auditado > limite_superior)
+      
+      data.frame(
+        Indicador = c("Monto Diferencia Total", "Porcentaje de Diferencia", 
+                      "Conteo Diferencias", "Casos Fuera de Límites"),
+        Valor = round(c(monto_diferencia_total, porcentaje_diferencia, 
+                        conteo_diferencias, casos_fuera_limites), 2)
+      )
+    }
     
     
+ ###########Tabla final de evaluación   ###########
+    
+      # Supongamos que DatosEval es tu dataframe reactivo
+      output$Eval <- renderReactable({
+        req(DatosEval())  # Asegúrate de que DatosEval esté disponible
+        tabla_evaluacion <- calculaIndicadoresEvaluacion(DatosEval())
+        reactable(tabla_evaluacion)
+      })
+
     
     
     
   })
+  
+  
   
   
   # Structura #
