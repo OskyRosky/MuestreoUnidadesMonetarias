@@ -465,7 +465,7 @@ body <- dashboardBody(
                      width = 8,  # Ocupará todo el ancho disponible
              reactableOutput("Eval"))
        )
-     
+
           
   )
   )
