@@ -30,23 +30,25 @@ server <- function(input, output, session) {
   
   # Leer los datos basados en el tipo de archivo
   
+
+  
   data1 <- reactive({
     inFile <- input$file1
-    
-    if (is.null(inFile)) return(NULL)
-    
-    ext <- tools::file_ext(inFile$name)
-    
-    if (ext == "xlsx") {
-      openxlsx::read.xlsx(inFile$datapath)
-    } else if (ext == "csv") {  # Corregido aquí
-      read.csv(inFile$datapath, stringsAsFactors = FALSE)
-    } else if (ext == "txt") {  # Y aquí
-      read.table(inFile$datapath, stringsAsFactors = FALSE, header = TRUE)
-    } else {
-      stop("Archivo no soportado.")
+    if (is.null(inFile)) {
+      return(NULL)
     }
-  })
+  
+  
+  ext <- tools::file_ext(inFile$datapath)
+  
+  # Dependiendo de la extensión del archivo, usar la función correspondiente
+  switch(ext,
+         csv = read.csv(inFile$datapath, stringsAsFactors = FALSE),
+         txt = read.delim(inFile$datapath, stringsAsFactors = FALSE),
+         xlsx = read_excel(inFile$datapath),
+         stop("Tipo de archivo no soportado")
+  )
+})
   
   # Selección de la variable
   
@@ -190,24 +192,30 @@ server <- function(input, output, session) {
   # Data la volvemos un objeto reactivo 
   #  data ---> data()
   
-  data2 <- reactive({
-    inFile <- input$file2
-    if (is.null(inFile)) {
-      return(NULL)
-    }
-    read.csv(inFile$datapath)
-  })
-  
-  
-  # Histograma de una variable #
-  
-  output$variable_select <- renderUI({
-    if (is.null(data2())) {
-      return(NULL)
-    } else {
-      selectInput("variable2", "Elija una variable:", names(data2()))
-    }
-  })
+    data2 <- reactive({
+      inFile <- input$file2
+      if (is.null(inFile)) {
+        return(NULL)
+      }
+      
+      ext <- tools::file_ext(inFile$datapath)
+      
+      # Dependiendo de la extensión del archivo, usar la función correspondiente
+      switch(ext,
+             csv = read.csv(inFile$datapath, stringsAsFactors = FALSE),
+             txt = read.delim(inFile$datapath, stringsAsFactors = FALSE),
+             xlsx = read_excel(inFile$datapath),
+             stop("Tipo de archivo no soportado")
+      )
+    })
+    
+    output$variable_select <- renderUI({
+      if (is.null(data2())) {
+        return(NULL)
+      } else {
+        selectInput("variable2", "Elija una variable:", names(data2()))
+      }
+    })
   
   # Datos para la tabla de sugerencias de tamaño de muestra
   sugerencias_tamaño <- data.frame(
@@ -396,7 +404,17 @@ server <- function(input, output, session) {
     if (is.null(inFile)) {
       return(NULL)
     }
-    read.csv(inFile$datapath)
+    
+    ext <- tools::file_ext(inFile$datapath)
+    
+    # Dependiendo de la extensión del archivo, usar la función correspondiente
+    switch(ext,
+           csv = read.csv(inFile$datapath, stringsAsFactors = FALSE),
+           txt = read.delim(inFile$datapath, stringsAsFactors = FALSE),
+           xlsx = read_excel(inFile$datapath),
+           stop("Tipo de archivo no soportado")
+    )
+    
   })
   
   
