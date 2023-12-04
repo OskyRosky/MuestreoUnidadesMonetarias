@@ -51,8 +51,8 @@ body <- dashboardBody(
             br(),
             tags$ul(
               style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
-              tags$li(h4("Analizar las principales estadísticas descriptivas de la variable de interés.", align = "left")),
-              tags$li(h4("Analizar la distribución de la variable de interés.", align = "left")),
+              tags$li(h4("Análisar las principalres estadísticas descriptivas de la variable de interés.", align = "left")),
+              tags$li(h4("Analisar la distribución de la variable de interés.", align = "left")),
               tags$li(h4("Según el análisis de la distribución de la variable de interés, tener una mejor idea del ajuste de la función de distribución.", align = "left"))
             ),
             br(),
@@ -116,7 +116,7 @@ body <- dashboardBody(
               tags$li(h4("Comprar la distribución de la variable seleccionada con respecto a una distribución de poisson o binomial.", align = "left"))
             ),
             br(),
-            h4("Este último punto lo guiará en el proceso de la siguiente sección, en donde deberá seleccionar la distribución que aproximada más al conjunto de datos em la determinación del tamaño de muestra"),
+            h4("Este último punto lo guirará en el proceso de la siguiente sección, en donde deberá seleccionar la distribución que aproximada más al conjunto de datos em la determinación del tamaño de muestra"),
             br(),
             
             h3("Cargar datos", align = "left"),
@@ -138,7 +138,7 @@ body <- dashboardBody(
             actionButton("start_analysis", "Iniciar Análisis Descriptivos", class = "btn-primary"),
             uiOutput("analysis_output"),
             br(),
-            h3("Estadísticas descriptivas", align = "left"),
+            h3("Estadíticas descriptivas", align = "left"),
             reactableOutput("stats"), # Salida para la tabla de estadísticas   ---->  reactableOutput()
             br(),
             h3("Análisis de distribuciones", align = "left"),
@@ -172,7 +172,7 @@ body <- dashboardBody(
               )
             ),
             h4("Si posee datos aglomerados o consistentes en todo el rango de posibles valores, es mejor que opte por un ajuste Binomial. Caso contrario,
-               datos que están muy alejados de la aglomeración y presentan uno o varios valores extremos, es mejor que opte por un ajuste de distribución
+               datos que están muy alejados de la aglomeración y presentan uno o varios valores extremos, es mejor que opte por un ajuste dedistrubición
                de poisson.", align = "left")
             
 
@@ -192,15 +192,15 @@ body <- dashboardBody(
             br(),
             h2("En este sección:", align = "left"),
             br(),
-            h4("Se lleva a cabo el proceso de muestreo: tamaño y selección de la unidades", align ="left"),
+            h4("Se lleva a cabo el proceso de muestreo: tamaño y selección de la unidaddes", align ="left"),
             br(),
             h4("Cargado los datos, usted podrá:"),
             br(),
             tags$ul(
               style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
               tags$li(h4("Calcular el tamaño de muestra.", align = "left")),
-              tags$li(h4("Visualizar las unidades seleccionadas", align = "left",)),
-              tags$li(h4("Comparar los datos cargados vs los datos obtenidos por la muestra.", align = "left")),
+              tags$li(h4("Visualizar las unidades selecciondas.", align = "left",)),
+              tags$li(h4("Comprar la los datos cargados vs los datos obtenidos por la muestra.", align = "left")),
               tags$li(h4("Descargar los datos de la muestra en formato, ya sea .csv, .txt y .xlsx", align = "left"))
             ),
             br(), 
@@ -306,7 +306,7 @@ body <- dashboardBody(
             #    Comparación de datos originales y muestra  #
             #################################################
                        
-                  h3("Comparación de datos cargados vs muestra seleccionada"),
+                  h3("Comprarción de datos cargados vs muestra seleccionada"),
                   br(),
             fluidRow(
               box(
@@ -337,7 +337,7 @@ body <- dashboardBody(
   tabItem(tabName = "p4",
           
           
-          h1("Evaluación de la auditoría.", align = "center"),
+          h1("Evalución de la auditoría.", align = "center"),
           br(),
           h2("En este sección:", align = "left"),
           br(),
