@@ -232,18 +232,27 @@ body <- dashboardBody(
                        h4("Cuando estás determinando el tamaño de una muestra para tu estudio, hay varios factores clave a considerar
                           que influyen directamente en la cantidad de datos que necesitas recolectar:",align = "left"),
                        br(),
-                       h4("Margen de Tolerancia (Tolerable): Este valor representa el máximo error de estimación que estás dispuesto a aceptar
+                       h4("Margen de Tolerancia (Tolerable)",align = "left", style = "font-weight: bold"),
+                       h4("Este valor representa el máximo error de estimación que estás dispuesto a aceptar
                           en tus resultados. Un margen mayor sugiere que estás tolerando una mayor incertidumbre, lo que puede resultar en una
                           muestra más pequeña. En contraste, un margen más ajustado requiere una muestra más grande para garantizar que tus estimaciones
                           estén dentro de ese rango estrecho.",align = "left"),
-                       h4("Error Esperado (Esperado): Este es el error que anticipas podría existir en tu población. Un valor más alto implica que esperas
+                       h4("Error Esperado (Esperado)",align = "left", style = "font-weight: bold"),
+                       h4("Este es el error que anticipas podría existir en tu población. Un valor más alto implica que esperas
                           más variabilidad en los datos, lo que se traduce en necesitar una muestra más grande para obtener estimaciones precisas.",align = "left"),
-                       h4("Nivel de Confianza: Cuanto mayor sea el nivel de confianza que desees tener en los resultados de tu muestra, mayor deberá
+                       h4("Nivel de Confianza",align = "left", style = "font-weight: bold"),
+                       h4("Cuanto mayor sea el nivel de confianza que desees tener en los resultados de tu muestra, mayor deberá
                           ser el tamaño de la misma. Esto se debe a que un nivel de confianza más alto indica que quieres estar más seguro de que tu 
                           muestra representa correctamente a toda la población.",align = "left"),
                        
                        br(),
-                       h3("Tabla de Referencia para Tamaño de Muestra",align = "left"),
+                       h3("Tabla de sugencia para determinar el tamaño de la muestra.",align = "left"),
+                       br(),
+                       h4("El tamaño de muestra depende de la capacidad operativa y las característica de la auditoría. ",align = "left"),
+                       h4("A continuación, Se presente una tabla con recomendaciones de tamaños de muestras, categorizadas en muestras de tamaño: pequeño, mediano y grande.",align = "left"),
+                       br(),
+                       
+
             
             fluidRow(
               box(
@@ -258,14 +267,10 @@ body <- dashboardBody(
               )
             ),
             
-                       br(),
                        h4("Utilizando los controles deslizantes de tu aplicación, los usuarios pueden ajustar estos parámetros para determinar un tamaño 
-                          de muestra que sea adecuado para sus necesidades específicas. A continuación, se muestra una tabla de referencia actualizada que
-                          podría ayudar a los usuarios a entender cómo estos ajustes podrían influir en el tamaño de la muestra requerido:",align = "left"),
+                          de muestra que sea adecuado para sus necesidades específicas.",align = "left"),
                        br(),
-                        
-                       h4("Nota:",align = "left"),
-            
+                       h4("Nota: defina los parámetros, y luego presione sobre 'Análisis de muestreo. Recuerde la distribución aproximada de la sección 'Descriptivo'." ,align = "left"),
                        sliderInput("freq1",
                                    "Tolerable:",
                                    min = 0.01,  max = 0.99, value = 0.05),
