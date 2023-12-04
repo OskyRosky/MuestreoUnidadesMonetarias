@@ -93,7 +93,8 @@ server <- function(input, output, session) {
           
           Stats <- Datos %>%
             
-            summarise(  ValoresNegativos = sum(Monto < 0, na.rm = TRUE),
+            summarise(  ConteoCasos = sum(!is.na(Monto)),  # Agrega esta línea para contar casos válidos
+                        ValoresNegativos = sum(Monto < 0, na.rm = TRUE),
                         ValoresFaltantes = sum(is.na(Monto)),
                         Minimo = min(Monto, na.rm = TRUE),
                         Maximo = max(Monto, na.rm = TRUE),

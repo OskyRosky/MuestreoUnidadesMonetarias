@@ -393,7 +393,7 @@ body <- dashboardBody(
               solidHeader = TRUE,
               collapsible = TRUE,
               width = 8,  # Ocupará todo el ancho disponible
-              div(style = "height: 400px;",  # Establece el alto de la tabla
+              div(style = "height: 400px; overflow-y: auto;",   # Establece el alto de la tabla
                   reactableOutput("Tabla2"))
             ),
             div(style = "height: 30px;"),  # Espacio entre los boxes
@@ -411,7 +411,7 @@ body <- dashboardBody(
               solidHeader = TRUE,
               collapsible = TRUE,
               width = 8,  # Ocupará todo el ancho disponible
-              div(style = "height: 400px;",  # Establece el alto de la tabla
+              div(style = "height: 400px; overflow-y: auto;",  # Establece el alto de la tabla
                   reactableOutput("Tabla3"))
             )
             
@@ -429,7 +429,7 @@ body <- dashboardBody(
              solidHeader = TRUE,
          collapsible = TRUE,
          width = 8,  # Ocupará todo el ancho disponible
-         div(style = "height: 400px;",  # Establece el alto de la tabla
+         div(style = "height: 400px; overflow-y: auto;",   # Establece el alto de la tabla
              reactableOutput("Riesgo"))
                 ),
          box(
