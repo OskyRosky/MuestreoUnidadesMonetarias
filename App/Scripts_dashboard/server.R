@@ -596,26 +596,6 @@ server <- function(input, output, session) {
       reactable(tabla_riesgo)
     })
     
-    calculaIndicadoresAudit <- function(datos) {
-      precision_total <- 1 - sum(abs(datos$Observado - datos$Auditado)) / sum(datos$Observado)
-      error_bruto_probable <- max(abs(datos$Observado - datos$Auditado))
-      error_neto_probable <- sum(datos$Observado - datos$Auditado)
-      limite_error_bruto <- mean(abs(datos$Observado - datos$Auditado)) + qnorm(0.95) * sd(abs(datos$Observado - datos$Auditado))
-      limite_error_neto <- mean(datos$Observado - datos$Auditado) + qnorm(0.95) * sd(datos$Observado - datos$Auditado)
-      
-      data.frame(
-        Indicador = c("Precisión Total", "Error Bruto Más Probable", "Error Neto Más Probable", 
-                      "Límites de Error Superior Bruto", "Límite de Error Superior Neto"),
-        Valor = round(c(precision_total, error_bruto_probable, error_neto_probable, limite_error_bruto, limite_error_neto), 1)
-      )
-    }
-    
-    output$Audit <- renderReactable({
-      req(DatosEval())  # Asegúrate de que DatosEval esté disponible
-      tabla_audit <- calculaIndicadoresAudit(DatosEval())
-      reactable(tabla_audit)
-    })
-    
     output$ScatterPlot_limit <- renderHighchart({
       req(DatosEval())  # Asegúrate de que los datos están disponibles
       
