@@ -473,15 +473,19 @@ server <- function(input, output, session) {
     
     # Evaluación únicamente de las diferencias
     
+    Diferencias <- reactive({
+      datos <- DatosEval()  # Asume que esta función devuelve tus datos
+      diferencias <- datos %>%
+        mutate(Diferencia = abs(Observado - Auditado)) %>%
+        filter(Diferencia != 0) %>%
+        arrange(desc(Diferencia))
+      diferencias  # Devuelve el dataframe resultante
+    })
+    
     
     output$Tabla3 <- renderReactable({
       
-      Diferencias <- DatosEval() %>%
-        mutate(Diferencia = abs(Observado - Auditado)) %>%
-        filter(Diferencia != 0) %>% 
-        arrange(desc(Diferencia))
-      
-      reactable(Diferencias)
+      reactable(Diferencias()) 
     })
     
     # Evaluación únicamente de las diferencias
@@ -495,6 +499,65 @@ server <- function(input, output, session) {
       
       reactable(Riesgo)
     })
+    
+    
+    ####################################
+    #         Descargar diferencias    #
+    ####################################
+    
+    observeEvent(input$show2, {
+      
+      showModal(modalDialog(
+        title = "Descargar las diferencias ", br(),
+        br(),
+        downloadButton("download3.1",".csv file"),
+        br(),
+        br(),
+        downloadButton("download3.2",".txt file"),
+        br(),
+        br(),
+        downloadButton("download3.3",".xlsx file"),
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE)
+      )
+      
+    })
+    
+    output$download3.1 <- downloadHandler(
+      
+      
+      filename = function() {
+        paste("Diferencias-", Sys.Date(), ".csv", sep="")
+      },
+      
+      content = function(file) {
+        write.csv(Diferencias(), file)
+      }
+    )
+    
+    output$download3.2 <- downloadHandler(
+      
+      filename = function() {
+        paste("Diferencias-", Sys.Date(), ".txt", sep="")
+      },
+      content = function(file) {
+        write.table(Diferencias(), file)
+      }
+    )
+    
+    output$download3.3 <- downloadHandler(
+      filename = function() {
+        paste("Diferencias-", Sys.Date(), ".xlsx", sep="")
+      },
+      content = function(file) {
+        # Suponiendo que Muestra() es una función que retorna el dataframe que quieres descargar
+        write.xlsx(Diferencias(), file)
+      }
+    )
+    
+    
+    
     
     # Creación de la función de indicadores de riesgo
     

@@ -415,10 +415,13 @@ body <- dashboardBody(
                   reactableOutput("Tabla3"))
             )
             
-          )
+          ),
+     
+     h3("Descargar tabla de diferencias."),
+     br(),
+     actionButton("show2", "Descargar archivo"),
           
-          
-          ,
+
           br(),
           h2("Indicadores de riesgo en la comparación de la información de los datos observados vs los datos auditados."),
           br(),
