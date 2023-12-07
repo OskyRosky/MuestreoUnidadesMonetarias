@@ -14,27 +14,28 @@ body <- dashboardBody(
     
     tabItem(tabName = "p1",
             
-            h1("Guía de Usuario para la Aplicación Shiny de Análisis de Muestras para Unidades Financieras.", align = "center"),
+            h1("Guía de usuario para la aplicación de análisis de muestras en unidades monetarias.", align = "center"),
             br(),
             h2("Introducción", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
-            h4("Bienvenido a la aplicación Shiny especializada en el análisis de muestras para unidades financieras.",align = "left"),
-            h4("Esta herramienta interactiva ha sido diseñada para facilitar el proceso de descripción, muestreo de auditoria y la evaluación de un conjunto de datos financieros." ,align = "left"),
+            h4("Bienvenidos(as) a la aplicación especializada en el análisis de muestras para unidades monetarias.",align = "left"),
+            br(),
+            h4("Esta herramienta interactiva ha sido diseñada para facilitar el proceso de descripción, de muestreo y de evaluación de una muestra de unidades monetaria." ,align = "left"),
             br(),
             h2("¡Inicie utilizando la App!", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
-            h4("Para comenzar con la aplicación, en cada sección deberá:",align = "left"),
+            h4("Para comenzar, en cada sección de la barra lateral izquierda, deberá:",align = "left"),
             br(),
-            h4("Navegación",align = "left", style = "font-weight: bold"),
-            h4("Mueva entre los diferentes módulos utilizando las pestañas dispuestas en la interfaz de usuario."),
+            h4("Navegar",align = "left", style = "font-weight: bold"),
+            h4("Navegue entre los diferentes módulos utilizando las pestañas dispuestas en la interfaz del usuario."),
             h4("Cargar Datos", align = "left", style = "font-weight: bold"), 
-            h4("Utilice el botón de carga de archivos para subir su conjunto de datos en el formato adecuado." ,align = "left"),
-            h4("Análisis: ",align = "left", style = "font-weight: bold"),
-            h4("Siga las instrucciones específicas en cada módulo para realizar el análisis deseado."),
+            h4("Utilice el botón gris en las apartados de Cargar  Datos para trabajar su conjunto de datos." ,align = "left"),
+            h4("Analizar",align = "left", style = "font-weight: bold"),
+            h4("Siga las instrucciones específicas en cada sección para realizar el análisis requerido."),
             br(),
             h2("Estructura de la Aplicación", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
-            h4("La aplicación se divide en tres módulos, cada uno enfocado en un aspecto crítico:",align = "left"),
+            h4("La aplicación se divide en tres módulos, cada uno enfocado en un aspecto crítico del muestreo en unidades monetarias:",align = "left"),
             br(),
             tags$ul(
               style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
@@ -53,30 +54,32 @@ body <- dashboardBody(
               style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
               tags$li(h4("Analizar las principales estadísticas descriptivas de la variable de interés.", align = "left")),
               tags$li(h4("Analizar la distribución de la variable de interés.", align = "left")),
-              tags$li(h4("Según el análisis de la distribución de la variable de interés, tener una mejor idea del ajuste de la función de distribución.", align = "left"))
+              tags$li(h4("Según el análisis de la distribución de la variable de interés, tener una mejor perspectiva del ajuste de la función de distribución.", align = "left"))
             ),
             br(),
             h2("Proceso de Muestreo", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
-            h4("Tras un entendimiento  del conjunto de datos, se procede con la etapa del Muestreo. Esta etapa consta de:",align = "left"),
+            h4("Tras un entendimiento  del conjunto de datos, se procede con la etapa del Muestreo. Esta etapa se conforma por:",align = "left"),
             br(),
             tags$ul(
               style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
               tags$li(h4("Determinar el tamaño de muestra.", align = "left")),
-              tags$li(h4("Visualizar la selección de los montos según el tamaño de muestra anterior.", align = "left")),
-              tags$li(h4("Comprar distribuciones entre los datos orginales y los obtenidos por la muestra.", align = "left")),
-              tags$li(h4("Descargar los datos seleccionados en el proceso de muestreo.", align = "left"))
+              tags$li(h4("Visualizar la selección de los casos (filas) según la determinación del tamaño de muestra.", align = "left")),
+              tags$li(h4("Comparar las distribuciones entre los datos orginales y los obtenidos por la muestra.", align = "left")),
+              tags$li(h4("Descargar los datos seleccionados en el proceso de muestreo (obtenidos por la muestra).", align = "left"))
             ),
             br(),
             h2("Evaluación de la Muestra", align = "left", style = "font-weight: bold; text-decoration: underline;"),
             br(),
-            h4("El último módulo, Evaluación de la Muestra, es para obtener un contraste empírico referente al proceso de la auditoria. En esta sección:",align = "left"),
+            h4("El último módulo es para obtener un contraste empírico referente al proceso de la auditoria de la muestra obtenida con anterioridad.",align = "left"),
+            h4("El foco está en comparar los valores observados (selecionados por la muestra), contra los valores auditados (obtenidos o revisados en el proceso de auditoria).",align = "left"),
+            h4("En esta sección de contraste empírico o comparación de datos:",align = "left"),
             br(),
             tags$ul(
               style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
-              tags$li(h4("Se comparan los resultados de una muestra antes seleccionados a nivel visual y los valores que presentan diferencias.", align = "left")),
-              tags$li(h4("Se realiza un cuadro con datos de interés del proceso de muestreo", align = "left")),
-              tags$li(h4("Se brinda un resultado empírico sobre el proceso de Auditoría.", align = "left"))
+              tags$li(h4("Se describen y comparan los resultados de una muestra antes seleccionados a nivel visual y los valores que presentan diferencias.", align = "left")),
+              tags$li(h4("Se presentan indicadores de riego según la comparación entre los valores observados y auditados.", align = "left")),
+              tags$li(h4("Se expone la selección de criterios o umbrales máximos tolerables en la evaluación de la muestra.", align = "left"))
             ),
             
             br(),
@@ -452,9 +455,23 @@ body <- dashboardBody(
          
              ),
           br(),
-          h2("Criterio empírico de evaluación de la muestra auditada."),
+          h2("Criterio empírico del máximo umbal permitido o tolerado."),
           br(),
+       h3("Se debe seleccionar límites permisibles que esté dispuesto a aceptar o tolerar entre la comparación de los valores observados y auditados."),
+       h3("Para esto, debe seleccionar valores, los cuales serán criteriores, los cuales esperaría que en la evaluación no sea superiores a este."),
+       h3("Los criteriores que debe seleccionar son en razón a:"),
+       br(),
      
+       h3("Monto máximo", align = "left", style = "font-weight: bold; text-decoration: underline;"),
+       h4("Monto máximo absoluto tolerable entre los valores observados y auditados."),
+       h3("Porcentaje máximo tolerado", align = "left", style = "font-weight: bold; text-decoration: underline;"),
+       h4("Razón entre las diferencias absolutas, dividido entre el monto total auditado, por 100."),
+       h3("Conteo máximo de diferencias", align = "left", style = "font-weight: bold; text-decoration: underline;"),
+       h4("El número máximo de diferencias que está dispuesto a tolerar."),
+       h3("Conteo máximo fuera de los límites de confianza", align = "left", style = "font-weight: bold; text-decoration: underline;"),
+       h4("El número máximo de diferencias, fuera de los límites de confianza, que está dispuesto a tolerar."),
+     br(),
+      h3("Nota: dentro de la tabla 'criterireos de evaluación', seleccione los valores máximos tolerables recien comentados. Precione el botón de 'Evaluación'"),
      fluidRow(
        box(
          title = "Criterios de Evaluación",
@@ -462,13 +479,13 @@ body <- dashboardBody(
          solidHeader = TRUE,
          collapsible = TRUE,
          width = 8,
-         sliderInput("monto_umbral", "Monto Umbral:", 
+         sliderInput("monto_umbral", "Monto Máximo tolerable:", 
                      min = 0.1, max = 100, value = 4),
-         sliderInput("porcentaje_umbral", "Porcentaje Diferencia Umbral:",
+         sliderInput("porcentaje_umbral", "Porcentaje máximo tolerado:",
                      min = 0.1, max = 100, value = 10),
-         sliderInput("conteo_umbral", "Conteo Diferencias Umbral:",
+         sliderInput("conteo_umbral", "Conteo máximo de diferencias:",
                      min = 0, max = 100, value = 10),
-         sliderInput("casos_umbral", "Casos Fuera de Límites Umbral:",
+         sliderInput("casos_umbral", "Conteo máximo fuera de los límites de confianza:",
                      min = 0, max = 100, value = 10),
          actionButton("auditEval", "Evaluación", class = "btn-primary")
        )
