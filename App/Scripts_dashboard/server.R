@@ -648,65 +648,62 @@ server <- function(input, output, session) {
     }
     
     
- ###########Tabla final de evaluación   ###########
-    
-      # Supongamos que DatosEval es tu dataframe reactivo
-    
-    # Función para calcular los umbrales de decisión
-    calculaUmbralDecision <- function(datos) {
-      fraccion_monto_auditado <- 0.01 * sum(datos$Auditado)
-      porcentaje_diferencia_umbral <- 1
-      conteos_diferencias_umbral <- 10
-      casos_fuera_limites_umbral <- 5
-      
-      c(fraccion_monto_auditado, porcentaje_diferencia_umbral, 
-        conteos_diferencias_umbral, casos_fuera_limites_umbral)
-    }
-    
-    # Función para calcular los indicadores de decisión y decisiones
-    calculaIndicadoresDecision <- function(datos) {
-      umbrales <- calculaUmbralDecision(datos)
-      
-      monto_diferencia_total <- round(sum(abs(datos$Observado - datos$Auditado)),1)
-      porcentaje_diferencia <- round((monto_diferencia_total / sum(datos$Auditado)) * 100,1)
-      conteo_diferencias <- sum(datos$Observado != datos$Auditado)
-      
-      std_dev <- sd(datos$Observado - datos$Auditado, na.rm = TRUE)
-      limite_inferior <- -1.96 * std_dev
-      limite_superior <- 1.96 * std_dev
-      casos_fuera_limites <- sum(datos$Observado - datos$Auditado < limite_inferior | 
-                                   datos$Observado - datos$Auditado > limite_superior)
-      
-      valores <- c(monto_diferencia_total, porcentaje_diferencia, 
-                   conteo_diferencias, casos_fuera_limites)
-      
-      decisiones <- ifelse(valores < umbrales, "Aceptable", "No es aceptable")
-      
-      data.frame(
-        Indicador = c("Monto Diferencia Total", "Porcentaje de Diferencia", 
-                      "Conteo Diferencias", "Casos Fuera de Límites"),
-        Valor = valores,
-        Criterio = umbrales,
-        Decision = decisiones
-      )
-    }
-    
-  
-      output$Eval <- renderReactable({
-        req(DatosEval())  # Asegúrate de que DatosEval esté disponible
-        tabla_decision <- calculaIndicadoresDecision(DatosEval()) %>% dplyr::select("Indicador", "Valor", "Criterio", "Decision")
-        reactable(tabla_decision)
-          
-        
-      })
-
-
-    
-    
     
   })
   
+  ##################################################
+  ###########Tabla final de evaluación   ###########
+  ##################################################
   
+  # Supongamos que DatosEval es tu dataframe reactivo
+  
+  # Función para calcular los umbrales de decisión
+  calculaUmbralDecision <- function(datos) {
+    fraccion_monto_auditado <- input$monto_umbral * sum(datos$Auditado)
+    porcentaje_diferencia_umbral <- input$porcentaje_umbral
+    conteos_diferencias_umbral <- input$conteo_umbral
+    casos_fuera_limites_umbral <- input$casos_umbral
+    
+    c(fraccion_monto_auditado, porcentaje_diferencia_umbral, 
+      conteos_diferencias_umbral, casos_fuera_limites_umbral)
+  }
+  
+  # Función para calcular los indicadores de decisión y decisiones
+  calculaIndicadoresDecision <- function(datos) {
+    umbrales <- calculaUmbralDecision(datos)
+    
+    monto_diferencia_total <- round(sum(abs(datos$Observado - datos$Auditado)),1)
+    porcentaje_diferencia <- round((monto_diferencia_total / sum(datos$Auditado)) * 100,1)
+    conteo_diferencias <- sum(datos$Observado != datos$Auditado)
+    
+    std_dev <- sd(datos$Observado - datos$Auditado, na.rm = TRUE)
+    limite_inferior <- -1.96 * std_dev
+    limite_superior <- 1.96 * std_dev
+    casos_fuera_limites <- sum(datos$Observado - datos$Auditado < limite_inferior | 
+                                 datos$Observado - datos$Auditado > limite_superior)
+    
+    valores <- c(monto_diferencia_total, porcentaje_diferencia, 
+                 conteo_diferencias, casos_fuera_limites)
+    
+    decisiones <- ifelse(valores < umbrales, "Aceptable", "No es aceptable")
+    
+    data.frame(
+      Indicador = c("Monto Diferencia Total", "Porcentaje de Diferencia", 
+                    "Conteo Diferencias", "Casos Fuera de Límites"),
+      Valor = valores,
+      Criterio = umbrales,
+      Decision = decisiones
+    )
+  }
+  
+  
+  output$Eval <- renderReactable({
+    req(DatosEval())  # Asegúrate de que DatosEval esté disponible
+    tabla_decision <- calculaIndicadoresDecision(DatosEval()) %>% dplyr::select("Indicador", "Valor", "Criterio", "Decision")
+    reactable(tabla_decision)
+    
+    
+  })
   
   
   # Structura #

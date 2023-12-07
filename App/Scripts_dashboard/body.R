@@ -455,16 +455,32 @@ body <- dashboardBody(
           h2("Criterio empírico de evaluación de la muestra auditada."),
           br(),
      
-          fluidRow(
-                 box(
-                     title = "Evaluación auditoría",
-                     status = "primary",
-                     solidHeader = TRUE,
-                    collapsible = TRUE,
-                     width = 8,  # Ocupará todo el ancho disponible
-             reactableOutput("Eval"))
+     fluidRow(
+       box(
+         title = "Criterios de Evaluación",
+         status = "primary",
+         solidHeader = TRUE,
+         collapsible = TRUE,
+         width = 8,
+         sliderInput("monto_umbral", "Monto Umbral:", 
+                     min = 0.1, max = 100, value = 4),
+         sliderInput("porcentaje_umbral", "Porcentaje Diferencia Umbral:",
+                     min = 0.1, max = 100, value = 10),
+         sliderInput("conteo_umbral", "Conteo Diferencias Umbral:",
+                     min = 0, max = 100, value = 10),
+         sliderInput("casos_umbral", "Casos Fuera de Límites Umbral:",
+                     min = 0, max = 100, value = 10),
+         actionButton("auditEval", "Evaluación", class = "btn-primary")
+       ),
+       box(
+         title = "Evaluación auditoría",
+         status = "primary",
+         solidHeader = TRUE,
+         collapsible = TRUE,
+         width = 8,
+         reactableOutput("Eval")
        )
-
+     )
           
   )
   )
