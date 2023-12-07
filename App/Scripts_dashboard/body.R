@@ -471,14 +471,19 @@ body <- dashboardBody(
          sliderInput("casos_umbral", "Casos Fuera de Límites Umbral:",
                      min = 0, max = 100, value = 10),
          actionButton("auditEval", "Evaluación", class = "btn-primary")
-       ),
-       box(
-         title = "Evaluación auditoría",
-         status = "primary",
-         solidHeader = TRUE,
-         collapsible = TRUE,
-         width = 8,
-         reactableOutput("Eval")
+       )
+     ),
+     fluidRow(
+       conditionalPanel(
+         condition = "input.auditEval > 0",
+         box(
+           title = "Evaluación auditoría",
+           status = "primary",
+           solidHeader = TRUE,
+           collapsible = TRUE,
+           width = 8,
+           reactableOutput("Eval")
+         )
        )
      )
           

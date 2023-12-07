@@ -655,9 +655,7 @@ server <- function(input, output, session) {
   ###########Tabla final de evaluación   ###########
   ##################################################
   
-  # Supongamos que DatosEval es tu dataframe reactivo
-  
-  # Función para calcular los umbrales de decisión
+  # Define la función para calcular los umbrales de decisión fuera del observeEvent
   calculaUmbralDecision <- function(datos) {
     fraccion_monto_auditado <- input$monto_umbral * sum(datos$Auditado)
     porcentaje_diferencia_umbral <- input$porcentaje_umbral
@@ -668,7 +666,7 @@ server <- function(input, output, session) {
       conteos_diferencias_umbral, casos_fuera_limites_umbral)
   }
   
-  # Función para calcular los indicadores de decisión y decisiones
+  # Define la función para calcular los indicadores de decisión y decisiones fuera del observeEvent
   calculaIndicadoresDecision <- function(datos) {
     umbrales <- calculaUmbralDecision(datos)
     
@@ -696,13 +694,19 @@ server <- function(input, output, session) {
     )
   }
   
+  # Observa cuando el botón "auditEval" es presionado
+  observeEvent(input$auditEval, {
+    # No es necesario definir las funciones aquí
+    # Solo realiza la acción necesaria cuando se presiona el botón
+  }, ignoreInit = TRUE)
   
+  # Renderiza la tabla reactiva solo después de que se presiona el botón de evaluación
   output$Eval <- renderReactable({
+    req(input$auditEval > 0)  # Usa una condición directamente aquí
     req(DatosEval())  # Asegúrate de que DatosEval esté disponible
-    tabla_decision <- calculaIndicadoresDecision(DatosEval()) %>% dplyr::select("Indicador", "Valor", "Criterio", "Decision")
+    tabla_decision <- calculaIndicadoresDecision(DatosEval()) %>%
+      dplyr::select("Indicador", "Valor", "Criterio", "Decision")
     reactable(tabla_decision)
-    
-    
   })
   
   
