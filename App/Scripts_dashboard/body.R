@@ -123,7 +123,6 @@ body <- dashboardBody(
             br(),
             
             h3("Cargar datos", align = "left"),
-            
             # Input para cargar archivos
             # Input para cargar archivos
             fileInput("file1", "Importar datos",
@@ -137,14 +136,19 @@ body <- dashboardBody(
                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                       )),
             uiOutput("variable_select_1"),
+            h4("IMPORTANTE: Debe seleccionar variables numéricas.",align = "left", style = "font-weight: bold"),
             br(),
             actionButton("start_analysis", "Iniciar Análisis Descriptivos", class = "btn-primary"),
             uiOutput("analysis_output"),
             br(),
             h3("Estadísticas descriptivas", align = "left"),
+            br(),
+            h4("Se presentan las principales para el análisis de la variable numérica seleccionada."),
             reactableOutput("stats"), # Salida para la tabla de estadísticas   ---->  reactableOutput()
             br(),
             h3("Análisis de distribuciones", align = "left"),
+            br(),
+            h4("Análisis de la densidad de la variable numérica seleccionada."),
             br(),                                                  # histogram1
             
             highchartOutput("histogram1"),
@@ -222,6 +226,7 @@ body <- dashboardBody(
                                  )),
                        br(),
                        uiOutput("variable_select"),
+                       h4("IMPORTANTE: Debe seleccionar variables numéricas.",align = "left", style = "font-weight: bold"),
                        br(),
             #           plotOutput("histogram2"),
                        h2("Muestreo: tamaño y selección", align = "left"),
@@ -349,19 +354,18 @@ body <- dashboardBody(
           br(),
           h2("En este sección:", align = "left"),
           br(),
-          h4("Cargado los datos, usted podrá:"),
+          h4("Una vez cargada la información, y seleccionadas las variables correspondientes a los datos observados y auditados,  usted podrá:"),
           br(),
           tags$ul(
             style = "list-style-type: disc; padding-left: 20px;",  # Estilo para la lista: disc es una viñeta redonda
             tags$li(h4("Comparar la información de los datos observados vs los datos auditados.", align = "left")),
-            tags$li(h4("Indicadores de riesgo en le proceso de comparación entre la información de los datos observados vs los datos auditados.", align = "left",)),
-            tags$li(h4("Criterio empírico sobre el proceso de evaluación de la muestra por unidades monetarias.", align = "left"))
+            tags$li(h4("De forma descriptiva, valorar las diferencias.", align = "left")),
+            tags$li(h4("Analizar ciertos Indicadores de Riesgo en el proceso de comparación entre la información de los datos observados vs los datos auditados.", align = "left",)),
+            tags$li(h4("Evaluar criterios empíricos en la determinación del umbral máximo permitido o tolerable.", align = "left"))
           ),
           br(), 
           
           h3("Cargar datos", align = "left"),
-          br(),
-          h3("Seleccionar el archivo a evaluar."),
           fileInput("file3", "Importar datos para la evaluación del muestreo.",
                     accept =  c(
                       ".csv",
@@ -389,11 +393,16 @@ body <- dashboardBody(
           
           uiOutput("var1"),
           uiOutput("var2"),
+          h4("IMPORTANTE: Debe seleccionar variables numéricas.",align = "left", style = "font-weight: bold"),
           br(),
           actionButton("analizar", "Evaluación", class = "btn-primary"),
           br(),
-          h2("Comparar la información de los datos observados vs los datos auditados."),
           br(),
+          h2("Comparar la información de los datos observados vs. los datos auditados."),
+          br(),
+          h4("Se presentan los datos en forma de tabla, gráfico de disperción, y las diferencias encontradas.",  align = "left"),
+          h4("Si desea, puede descargar los casos u observaciones con diferencias.",  align = "left"),
+         br(),
           fluidRow(
             box(
               title = "Tabla de Datos",
@@ -425,13 +434,22 @@ body <- dashboardBody(
             
           ),
      
-     h3("Descargar tabla de diferencias."),
+     h4("Descargar tabla de diferencias."),
      br(),
      actionButton("show2", "Descargar archivo"),
           
 
           br(),
+          br(),
           h2("Indicadores de riesgo en la comparación de la información de los datos observados vs los datos auditados."),
+          br(),
+          h4("Los indicadores de riesgo son medidas que ayudan en la comparación entre los valores observados y los valores auditados."),
+          h4("Estos se representan en términos de medidas y mediante una representación gráfica."),
+          h4("Las medidas son relativas a la suma de los montos, montos promedios, total de observaciones, cantidad de casos diferentes, "),
+          h4("cantidad y suma de sabrevaloraciones,cantidad y suma de infravolaraciones, y porcentaje de diferencia entre las variables."),
+          h4("Por otra parte,de forma visual se presente el gráfico de dispersión pero ahora con intervalores de confianza."),
+          br(),
+          h4("La tabla de 'Indicadores de riesgo de evaluación' y 'Gráfico de Dispersión con intervalos de confianza' evaluan las diferencias entre los valores observados y auditados."),
           br(),
           fluidRow(
              box(
@@ -444,7 +462,7 @@ body <- dashboardBody(
              reactableOutput("Riesgo"))
                 ),
          box(
-           title = "Gráfico de Dispersión con intervalos",
+           title = "Gráfico de Dispersión con intervalos de confianza",
            status = "primary",
            solidHeader = TRUE,
            collapsible = TRUE,
@@ -455,11 +473,11 @@ body <- dashboardBody(
          
              ),
           br(),
-          h2("Criterio empírico del máximo umbal permitido o tolerado."),
+          h2("Criterio empírico del máximo umbral permitido o tolerado."),
           br(),
-       h3("Se debe seleccionar límites permisibles que esté dispuesto a aceptar o tolerar entre la comparación de los valores observados y auditados."),
-       h3("Para esto, debe seleccionar valores, los cuales serán criteriores, los cuales esperaría que en la evaluación no sea superiores a este."),
-       h3("Los criteriores que debe seleccionar son en razón a:"),
+       h4("Se debe seleccionar límites permisibles que esté dispuesto a aceptar o tolerar entre la comparación de los valores observados y auditados."),
+       h4("Para esto, debe seleccionar valores, los cuales serán criteriores, los cuales esperaría que en la evaluación no sea superiores a este."),
+       h4("Los criteriores que debe seleccionar son en razón a:"),
        br(),
      
        h3("Monto máximo", align = "left", style = "font-weight: bold; text-decoration: underline;"),
@@ -471,7 +489,7 @@ body <- dashboardBody(
        h3("Conteo máximo fuera de los límites de confianza", align = "left", style = "font-weight: bold; text-decoration: underline;"),
        h4("El número máximo de diferencias, fuera de los límites de confianza, que está dispuesto a tolerar."),
      br(),
-      h3("Nota: dentro de la tabla 'criterireos de evaluación', seleccione los valores máximos tolerables recien comentados. Precione el botón de 'Evaluación'"),
+      h3("Nota: dentro de la tabla 'criterireos de evaluación', seleccione los valores máximos tolerables recien comentados. Presione el botón de 'Evaluación'"),
      fluidRow(
        box(
          title = "Criterios de Evaluación",
@@ -479,8 +497,8 @@ body <- dashboardBody(
          solidHeader = TRUE,
          collapsible = TRUE,
          width = 8,
-         sliderInput("monto_umbral", "Monto Máximo tolerable:", 
-                     min = 0.1, max = 100, value = 4),
+         numericInput("monto_maximo", "Monto máximo tolerable:", 
+                      min = 0, value = 5000), 
          sliderInput("porcentaje_umbral", "Porcentaje máximo tolerado:",
                      min = 0.1, max = 100, value = 10),
          sliderInput("conteo_umbral", "Conteo máximo de diferencias:",

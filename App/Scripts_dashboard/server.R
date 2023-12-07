@@ -657,7 +657,7 @@ server <- function(input, output, session) {
   
   # Define la función para calcular los umbrales de decisión fuera del observeEvent
   calculaUmbralDecision <- function(datos) {
-    fraccion_monto_auditado <- input$monto_umbral * sum(datos$Auditado)
+    fraccion_monto_auditado <- input$monto_maximo
     porcentaje_diferencia_umbral <- input$porcentaje_umbral
     conteos_diferencias_umbral <- input$conteo_umbral
     casos_fuera_limites_umbral <- input$casos_umbral
