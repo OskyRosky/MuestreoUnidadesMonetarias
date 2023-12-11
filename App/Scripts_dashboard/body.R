@@ -500,9 +500,9 @@ body <- dashboardBody(
          numericInput("monto_maximo", "Monto máximo tolerable:", 
                       min = 0, value = 5000), 
          sliderInput("porcentaje_umbral", "Porcentaje máximo tolerado:",
-                     min = 0.1, max = 100, value = 10),
+                     min = 0.01,  max = 0.99, value = 0.15),
          sliderInput("conteo_umbral", "Conteo máximo de diferencias:",
-                     min = 0, max = 100, value = 10),
+                     min = 0, max = 100, value = 15),
          sliderInput("casos_umbral", "Conteo máximo fuera de los límites de confianza:",
                      min = 0, max = 100, value = 10),
          actionButton("auditEval", "Evaluación", class = "btn-primary")
